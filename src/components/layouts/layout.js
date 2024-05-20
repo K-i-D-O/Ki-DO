@@ -40,7 +40,7 @@ export default function Layout({ children }) {
           cursor: pointer !important;
         }
       `}</style>
-      <div id="layout-wrapper" className={`${lemonada.variable} ${notoSansKr.variable}  ${mochiypoppone.variable} ${nanumpenscript.variable} realative h-[100vh] lg:w-[95%] w-full lg:max-w-[450px] flex flex-col items-center justify-between font-custom duration-500 layout-load preload lg:ml-[50%] mx-auto `} data-aos="zoom-out" data-aos-duration="500" data-aos-once="true">
+      <div id="layout-wrapper" className={`${lemonada.variable} ${notoSansKr.variable}  ${mochiypoppone.variable} ${nanumpenscript.variable} realative h-[100vh] lg:w-[95%] w-full lg:max-w-[450px] flex flex-col items-center justify-between font-custom duration-500 layout-load preload lg:ml-[50%] mx-auto `}>
         <main className={classNames("main-wrapper w-full h-[calc(100%-68px)]")}>{children}</main>
         <QuickNav />
         <div className="absolute top-[42%] left-[-100%] animate-bounce">

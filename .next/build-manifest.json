@@ -30,20 +30,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/kiosk": [
+    "/help_req/settings_helper_accpet": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/kiosk.js"
+      "static/chunks/pages/help_req/settings_helper_accpet.js"
     ],
     "/kiosk/food": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/kiosk/food.js"
-    ],
-    "/kiosk/food/kiosk_view_1": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/kiosk/food/kiosk_view_1.js"
     ]
   },
   "ampFirstPages": []
