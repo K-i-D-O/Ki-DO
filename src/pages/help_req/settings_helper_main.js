@@ -17,7 +17,7 @@ export default function Main() {
       </Head>
       <NavBar title="도움 요청하기" link="/help_req/settings"></NavBar>
       <div className="flex flex-col items-center justify-between w-full h-[calc(100%-48px)] px-[20px] bg-[#232323] py-[30px]">
-        <div className="flex flex-col items-center gap-y-[24px] w-full h-auto  ">
+        <div className="flex flex-col items-center gap-y-[18px] w-full h-auto  ">
           <label
             onClick={() => {
               router.push("/help_req/settings");
@@ -34,8 +34,8 @@ export default function Main() {
               <span className="absolute flex justify-center items-center w-[28px] h-[28px] left-[4px] rounded-full peer-checked:translate-x-[29px] transform transition-transform bg-[#fff]"></span>
             </label>
           </label>
-          <div className=" w-full h-auto py-[30px] px-[24px] bg-[#fff] rounded-[4px]">
-            <form action="/help_req/settings_helper_main" className="flex flex-col items-center gap-y-[24px] w-full h-auto">
+          <div className=" w-full h-auto py-[20px] px-[24px] bg-[#fff] rounded-[4px]">
+            <form action="/help_req/settings_helper_main" className="flex flex-col items-center gap-y-[19px] w-full h-auto">
               <p className="text-[#090A0A] text-[17px] font-[700] tracking-[-0.8px] leading-[117%] text-left w-full">최근 도움 요청</p>
               <div className="w-full flex flex-col items-center gap-y-[16px] bg-[#F7F8F9] border border-[#dfdfdf] rounded-[4px] p-[15px]">
                 <div className="w-full flex items-center gap-x-[10px]">
@@ -53,7 +53,7 @@ export default function Main() {
                   <p className="text-[#232323] text-[17px] font-[500] tracking-[-0.8px] leading-[117%]">내 위치에서 500M</p>
                 </div>
               </div>
-              <Link href="/help_req/settings_helper_accpet" className="bg-primary flex items-center justify-center py-[15px] px-[15px] rounded-[48px] text-[#fff] w-full text-[18px] font-[700] tracking-[-0.8px] hover:opacity-70">
+              <Link href="/help_req/settings_helper_accpet" className="bg-primary flex items-center justify-center py-[13px] px-[15px] rounded-[48px] text-[#fff] w-full text-[18px] font-[700] tracking-[-0.8px] hover:opacity-70">
                 요청 수락하기
               </Link>
               <Link href="/" className="text-[#232323] text-[15px] font-[700] leading-[110%] tracking-[-0.2px] hover:opacity-70">
