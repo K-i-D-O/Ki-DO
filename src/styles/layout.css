@@ -1,0 +1,117 @@
+/* #layout-wrapper.layout-load{
+    width:100%;
+    transition: 1s;
+    opacity: 1;
+}
+
+#layout-wrapper.layout-load.preload{
+    opacity: 0;
+    transition: 1s;
+}
+ */
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  src: url('https://fonts.googleapis.com/css2?family=Lemonada:wght@300;400;500;600;700&family=Mochiy+Pop+P+One&family=Noto+Sans+KR:wght@100;200;300;400;500;600;700;800;900&display=swap');
+  unicode-range: U+0030-0039;
+}
+
+html,
+body #__next {
+  height: 100%;
+  width: 100vw;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  font-family: 'Noto Sans KR' !important;
+}
+.h-\[100vh\] {
+  height: calc(var(--vh, 1vh) * 100) !important;
+}
+
+.lg\:aspect-\[192\/65\] {
+  box-shadow: 1px 1px 6px 2px lightgray;
+}
+
+.main-banner-swiper-wrapper .swiper-button-next,
+.main-banner-swiper-wrapper .swiper-button-prev {
+  display: none !important;
+}
+.main-banner-swiper-wrapper .swiper-button-next:after,
+.main-banner-swiper-wrapper .swiper-button-prev:after {
+  display: none !important;
+}
+.main-banner-swiper-wrapper .main-banner-swiper-btn-wrapper .swiper-button-prev,
+.main-banner-swiper-wrapper
+  .main-banner-swiper-btn-wrapper
+  .swiper-button-next {
+  display: flex !important;
+  position: unset !important;
+  margin: 0 !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+.main-special-swiper-wrapper .swiper-pagination-progressbar {
+  top: unset !important;
+  bottom: 0px !important;
+}
+.main-special-swiper-wrapper
+  .swiper-pagination-progressbar
+  .swiper-pagination-progressbar-fill {
+  background-color: #2e4b35 !important;
+}
+
+.reservation-info-gradient-bg {
+  background: linear-gradient(
+    90deg,
+    #2e4b35 42.19%,
+    rgba(46, 75, 53, 0.5) 100%
+  );
+}
+details.group {
+  appearance: none !important;
+}
+details.group::-webkit-details-marker {
+  appearance: none !important;
+  display: none !important;
+}
+summary::-webkit-details-marker {
+  display: none !important;
+}
+
+.custom-animate-bounce {
+  animation: custombounce 1s infinite;
+}
+
+.custom-animate-spin {
+  animation: customspin 6s infinite backwards alternate;
+}
+@keyframes custombounce {
+  0% {
+    transform: translate(-50%, 0%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translate(-50%, 20%);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+  100% {
+    transform: translate(-50%, 0%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+}
+
+@keyframes customspin {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(20deg);
+  }
+  50% {
+    transform: rotate(-20deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}

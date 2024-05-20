@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard-dynamic-subset.css');
+
+body {
+  font-family: 'Pretendard', sans-serif;
+}
+
+.modal {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 20px;
+}
+
+/* Rnage Date  */
+.DateRangePickerInput__withBorder {
+  border: none !important;
+}
+.DateInput_input {
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+}
+
+.CalendarDay[aria-disabled='true'] {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.DayPicker_transitionContainer {
+  height: 500px !important;
+}
+.DateRangePicker_picker .CalendarDay__selected {
+  background-color: #1e40af;
+  border: 1px double #1e40af;
+  color: white;
+}
+
+.DateRangePicker_picker .CalendarDay__selected:hover {
+  background-color: #1e40af;
+  border: 1px double #1e40af;
+  color: white;
+}
+
+.DateRangePicker_picker .CalendarDay__selected:active {
+  background-color: #1e40af;
+  border: 1px double #1e40af;
+  color: white;
+}
+.DateRangePicker_picker .CalendarDay__selected_span {
+  background-color: #4761b4;
+  border: 1px double #4761b4;
+  color: white;
+}
+.DateRangePicker_picker .CalendarDay__selected_span:hover {
+  background-color: #4761b4;
+  border: 1px double #4761b4;
+  color: white;
+}
+.DateRangePicker_picker .CalendarDay__selected_span:active {
+  background-color: #4761b4;
+  border: 1px double #4761b4;
+  color: white;
+}
+
+.DateRangePicker_picker .CalendarDay__hovered_span {
+  background-color: #4761b4;
+  border: 1px double #4761b4;
+  color: white;
+}
+.DateRangePicker_picker .CalendarDay__hovered_span:hover {
+  background-color: #4761b4;
+  border: 1px double #4761b4;
+  color: white;
+}
+.DateRangePicker_picker .CalendarDay__hovered_span:active {
+  background-color: #4761b4;
+  border: 1px double #4761b4;
+  color: white;
+}
+
+.DateRangePicker_picker .DayPicker_weekHeader_li:first-child {
+  color: red;
+}
+.DateRangePicker_picker .DayPicker_weekHeader_li:last-child {
+  color: blue;
+}
+.DateRangePicker_picker .CalendarDay:first-child {
+  color: red;
+}
+.DateRangePicker_picker .CalendarDay:last-child {
+  color: blue;
+}
+
+/* Full Calendar  */
+
+.fc-day-past {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.fc-col-header-cell.fc-day-sun {
+  color: red;
+}
+.fc-col-header-cell.fc-day-sat {
+  color: blue;
+}
+
+.fc .fc-day-sat .fc-daygrid-day-top {
+  color: blue;
+}
+.fc .fc-day-sun .fc-daygrid-day-top {
+  color: red;
+}
+.fc .fc-day-other .fc-daygrid-day-top {
+  opacity: 1;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.fc-daygrid-dot-event.fc-event-mirror,
+.fc-daygrid-dot-event:hover {
+  background: none !important;
+}
+
+:root {
+  --fc-today-bg-color: #eaf6ff !important;
+}
+
+.fc .fc-daygrid-day-top {
+  position: sticky;
+  z-index: 100;
+  top: -1px;
+  background-color: white;
+  box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.2);
+}

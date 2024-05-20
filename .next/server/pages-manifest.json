@@ -1,0 +1,10 @@
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/kiosk/food": "pages/kiosk/food.js",
+  "/": "pages/index.js",
+  "/kiosk/food/kiosk_view_1": "pages/kiosk/food/kiosk_view_1.js",
+  "/kiosk": "pages/kiosk.js",
+  "/help_req": "pages/help_req.js"
+}
