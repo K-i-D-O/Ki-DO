@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 const Timer = () => {
-  const [remainingTime, setRemainingTime] = useState(1 * 20); // 30 minutes * 60 seconds = 1800 seconds
+  const [remainingTime, setRemainingTime] = useState(1 * 6); // 30 minutes * 60 seconds = 1800 seconds
 
   useEffect(() => {
     const intervalId = setInterval(() => {

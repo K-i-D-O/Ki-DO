@@ -49,7 +49,7 @@ export default function Main() {
               <path d="M14.5835 20.6067H35.4168L33.696 13.7923C33.4842 12.9535 32.6388 12.3567 31.6623 12.3567H18.338C17.3615 12.3567 16.5161 12.9535 16.3043 13.7923L14.5835 20.6067Z" fill="#43CCF8" stroke="white" stroke-width="1.66667" stroke-linejoin="round" />
             </svg>
           </Link>
-          <Link href="/helper_map" className="duration-500 flex flex-row gap-x-[5px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 p-[25px] bg-[#fff]">
+          <Link href="/kiosk/food" className="duration-500 flex flex-row gap-x-[5px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 p-[25px] bg-[#fff]">
             <div className="flex flex-col gap-y-[18px]">
               <p className="text-[#232323] text-[17px] font-[700] tracking-[-0.8px] line-clamp-1">아아 2잔이랑 케이크 주세요!</p>
               <div className="bg-primary flex items-center justify-center py-[8px] px-[15px] rounded-[48px] text-[#fff] w-[220px] text-[19px] font-[700] tracking-[-0.6px]">카페 주문하러 가기</div>
