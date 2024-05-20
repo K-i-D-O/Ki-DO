@@ -28,6 +28,34 @@ SECRET_KEY = 'django-insecure-4foa&*2_h+v%@z-jjlym6v528#67dd_l=e05jap3*dh4ptea2m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# CORS 설정
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000", 
+]
+
+# CORS 허용 메소드 설정
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+]
+
+# CORS 허용 헤더 설정
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
 ALLOWED_HOSTS = []
 
 
@@ -40,9 +68,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    ##여기서부터 추가
+    'help_request',
+    'corsheaders',
+
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', # CORS 관련 추가 (가장 상단에 위치)
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
