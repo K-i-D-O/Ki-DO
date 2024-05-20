@@ -13,11 +13,11 @@ export default function Main() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar title="모의 키오스크" link="#"></NavBar>
-      <div className="relative flex flex-col items-center justify-center w-full h-[calc(100%-48px)] overflow-y-auto px-[20px] bg-[#232323] pt-[20px] pb-[60px]">
-        <img className="absolute bottom-[30px] left-[50%] translate-x-[-50%]  w-[90%]" src="/imgs/kiosk_list/status.svg" alt="status 이미지" />
-        <div className="flex flex-col gap-y-[40px] items-center justify-center w-full">
-          <Link href="/kiosk/food/kiosk_view_1" className="kiosk_mission_list relative duration-500 flex flex-row gap-x-[3px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 px-[16px] py-[20px] bg-[#DFDFDF] opacity-[0.85]">
-            <div className="flex flex-col gap-y-[18px]">
+      <div className="relative flex flex-col items-center justify-start w-full h-[calc(100%-48px)] px-[20px] bg-[#232323] pt-[20px] pb-[60px]">
+        <img className="absolute bottom-[20px] left-[50%] translate-x-[-50%]  w-[90%]" src="/imgs/kiosk_list/status.svg" alt="status 이미지" />
+        <div className="flex flex-col gap-y-[18px] items-center justify-center w-full overflow-y-auto  my-[5px] mb-[40px] pt-[70px] sm:pt-[0px] sm:mb-[20px]">
+          <Link href="/kiosk/food/kiosk_view_1" className="kiosk_mission_list relative duration-500 flex flex-row gap-x-[3px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 px-[16px] py-[15px] bg-[#DFDFDF] opacity-[0.85]">
+            <div className="flex flex-col gap-y-[11px]">
               <p className="text-[#232323] text-[16px] font-[700] tracking-[-0.8px] ">
                 치즈버거 세트를 주문해 볼까요?
                 <br /> 제일 간단한 버거 세트 주문하기
@@ -43,8 +43,8 @@ export default function Main() {
               </svg>
             </div>
           </Link>
-          <Link href="/kiosk/food/kiosk_view_1" className="kiosk_mission_list duration-500 flex flex-row gap-x-[3px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 px-[16px] py-[20px] bg-[#fff]">
-            <div className="flex flex-col gap-y-[18px]">
+          <Link href="/kiosk/food/kiosk_view_1" className="kiosk_mission_list duration-500 flex flex-row gap-x-[3px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 px-[16px] py-[15px] bg-[#fff]">
+            <div className="flex flex-col gap-y-[11px]">
               <p className="text-[#232323] text-[16px] font-[700] tracking-[-0.8px] ">
                 옵션을 변경해 볼까요?
                 <br />
@@ -54,8 +54,8 @@ export default function Main() {
             </div>
             <img className="w-[100px] aspect-square" src="/imgs/kiosk_list/food_2.svg" alt="2단계 이미지" />
           </Link>
-          <Link href="/kiosk/food/kiosk_view_1" className="kiosk_mission_list duration-500 flex flex-row gap-x-[3px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 px-[16px] py-[20px] bg-[#fff]">
-            <div className="flex flex-col gap-y-[18px]">
+          <Link href="/kiosk/food/kiosk_view_1" className="kiosk_mission_list duration-500 flex flex-row gap-x-[3px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 px-[16px] py-[15px] bg-[#fff]">
+            <div className="flex flex-col gap-y-[11px]">
               <p className="text-[#232323] text-[16px] font-[700] tracking-[-0.8px] ">
                 추가 주문해 볼까요?
                 <br />

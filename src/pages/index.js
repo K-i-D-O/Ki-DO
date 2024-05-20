@@ -14,8 +14,8 @@ export default function Main() {
       </Head>
       <NavBar title="홈화면" link="#"></NavBar>
       <div className="flex flex-col items-center justify-center w-full h-[calc(100%-48px)] overflow-y-auto px-[20px] bg-[#232323] py-[20px]">
-        <div className="flex flex-col gap-y-[40px] items-center justify-center w-full">
-          <Link href="/kiosk" className="duration-500 flex flex-row gap-x-[5px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 p-[25px] bg-[#fff]">
+        <div className="flex flex-col gap-y-[26px] items-center justify-center w-full">
+          <Link href="/kiosk" className="duration-500 flex flex-row gap-x-[5px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 px-[22px] py-[18px] bg-[#fff]">
             <div className="flex flex-col gap-y-[18px]">
               <p className="text-[#232323] text-[24px] font-[700] tracking-[-0.6px] line-clamp-1">도전! 키오스크 활용</p>
               <div className="bg-primary flex items-center justify-center py-[8px] px-[15px] rounded-[48px] text-[#fff] text-[14px] font-[700] tracking-[-0.6px]">모의 키오스크 시작하기</div>
@@ -37,7 +37,7 @@ export default function Main() {
               </defs>
             </svg>
           </Link>
-          <Link href="/help_req" className="duration-500 flex flex-row gap-x-[5px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 p-[25px] bg-[#fff]">
+          <Link href="/help_req" className="duration-500 flex flex-row gap-x-[5px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 px-[22px] py-[18px] bg-[#fff]">
             <div className="flex flex-col gap-y-[18px]">
               <p className="text-[#232323] text-[24px] font-[700] tracking-[-0.6px] line-clamp-1">나 좀 도와주세요!</p>
               <div className="bg-primary flex items-center justify-center py-[8px] px-[15px] rounded-[48px] text-[#fff] text-[14px] font-[700] tracking-[-0.6px]">주변에 도움요청하기</div>
@@ -48,7 +48,7 @@ export default function Main() {
               <path d="M24.4141 35.9375C25.4927 35.9375 26.3672 35.0631 26.3672 33.9844C26.3672 32.9057 25.4927 32.0312 24.4141 32.0312C23.3354 32.0312 22.4609 32.9057 22.4609 33.9844C22.4609 35.0631 23.3354 35.9375 24.4141 35.9375Z" fill="#232323" />
             </svg>
           </Link>
-          <Link href="/helper_map" className="duration-500 flex flex-row gap-x-[5px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 p-[25px] bg-[#fff]">
+          <Link href="/helper_map" className="duration-500 flex flex-row gap-x-[5px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 px-[22px] py-[18px] bg-[#fff]">
             <div className="flex flex-col gap-y-[18px]">
               <p className="text-[#232323] text-[24px] font-[700] tracking-[-0.6px] line-clamp-1">근처 디지털 안내사</p>
               <div className="bg-primary flex items-center justify-center py-[8px] px-[15px] rounded-[48px] text-[#fff] text-[14px] font-[700] tracking-[-0.6px]">내 근처 디지털 안내사 찾기</div>
