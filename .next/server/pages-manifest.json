@@ -1,8 +1,0 @@
-{
-  "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/help_req/settings_helper_accpet": "pages/help_req/settings_helper_accpet.js",
-  "/kiosk/food": "pages/kiosk/food.js"
-}
