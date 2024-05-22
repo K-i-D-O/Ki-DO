@@ -2,8 +2,31 @@ import Head from "next/head";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import NavBar from "@/components/common/Sub/navBar";
 import Link from "next/link";
+import axios from "axios";
 
 export default function Main() {
+  const [loading, setLoading] = useState(true);
+  const [username, setUsername] = useState(null);
+
+  useEffect(() => {
+    const guestLogin = async () => {
+      try {
+        console.log('API URL:', process.env.NEXT_PUBLIC_DJANGO_API_URL);
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/guest-login/`);
+        setUsername(response.data.username);
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to login as guest', error);
+        setLoading(false);
+      }
+    };
+
+    guestLogin();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   return (
     <>
       <Head>
