@@ -12,15 +12,17 @@ export default function Main() {
     const guestLogin = async () => {
       try {
         console.log('API URL:', process.env.NEXT_PUBLIC_DJANGO_API_URL);
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/guest-login/`);
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/guest-login/`); 
         setUsername(response.data.username);
+        localStorage.setItem('guestUsername', response.data.username); //guestId 로컬스토리지에 저장
+        console.log('Guest Username Set in Local Storage:', response.data.username);
         setLoading(false);
       } catch (error) {
         console.error('Failed to login as guest', error);
         setLoading(false);
       }
     };
-
+  
     guestLogin();
   }, []);
 
