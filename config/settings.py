@@ -28,10 +28,19 @@ SECRET_KEY = 'django-insecure-4foa&*2_h+v%@z-jjlym6v528#67dd_l=e05jap3*dh4ptea2m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Session settings
+SESSION_COOKIE_NAME = 'kido-app'
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = False  # HTTPS가 아닌 개발 환경에서는 False로 설정
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
 # CORS 설정
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000", 
 ]
+
+# CORS 자격증명 허용
+CORS_ALLOW_CREDENTIALS = True
 
 # CORS 허용 메소드 설정
 CORS_ALLOW_METHODS = [

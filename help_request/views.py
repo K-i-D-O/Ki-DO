@@ -40,14 +40,29 @@ def guest_login(request):
     return JsonResponse({'status': 'error'}, status=400)
 
 @csrf_exempt
-@login_required
 def become_helper(request):
     if request.method == 'POST':
-        profile = request.user.helperprofile
-        profile.is_helper = True
-        profile.save()
-        return JsonResponse({'status': 'success', 'message': 'You are now a helper'}, status=200)
-    return JsonResponse({'status': 'error'}, status=400)
+        data = json.loads(request.body)
+        is_helper = data.get('is_helper')
+        username = data.get('username')
+        print(is_helper)
+        if not username:
+            return JsonResponse({'status': 'error', 'message': 'No username provided'}, status=400)
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User does not exist'}, status=404)
+        
+        if user.username.startswith('guest_'):
+            print("This is a guest user")
+        
+        if is_helper is not None:
+            profile = user.helperprofile
+            profile.is_helper = is_helper
+            profile.save()
+            return JsonResponse({'status': 'success', 'message': f'Helper status set to {is_helper}'}, status=200)
+        return JsonResponse({'status': 'error', 'message': 'Invalid data'}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
 
 @csrf_exempt
 @login_required
