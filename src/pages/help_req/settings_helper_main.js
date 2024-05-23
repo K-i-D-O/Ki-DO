@@ -8,13 +8,39 @@ import axios from 'axios';
 export default function Main() {
   const router = useRouter();
   const [isHelper, setIsHelper] = useState(false);
+  
+  useEffect(() => {
+    const { code } = router.query;
+    if (code) {
+      const sendCodeToBackend = async (code) => {
+        try {
+          const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/kakao/callback/`,
+            { code }
+          );
+          const userData = response.data.user_data;
 
-  // useEffect(() => {
-  //   // 페이지 로드 시 로컬 스토리지에서 username을 가져옵니다.
-  //   const storedUsername = localStorage.getItem('guestUsername');
-  //   console.log('Loaded username from local storage:', storedUsername);
-  // }, []);
+          // Convert guest user to helper
+          const convertResponse = await axios.post(
+            `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/kakao-helper/`,
+            userData
+          );
+          console.log(userData)
+          if (convertResponse.data.status === 'success') {
+            localStorage.setItem('guestUsername', userData.id); // 업데이트된 guestUsername
+            setIsHelper(true); // 헬퍼 상태로 전환
+            router.push('/help_req/settings_helper_main');
+          } else {
+            console.error('Failed to convert to helper:', convertResponse.data.message);
+          }
+        } catch (error) {
+          console.error('Error during Kakao login', error);
+        }
+      };
 
+      sendCodeToBackend(code);
+    }
+  }, [router.query]);
 
   const toggleHelperStatus = async (status) => {
     try {
@@ -38,7 +64,6 @@ export default function Main() {
     }
   };
   
-
   return (
     <>
       <Head>
@@ -75,6 +100,8 @@ export default function Main() {
               <span className="absolute flex justify-center items-center w-[28px] h-[28px] left-[4px] rounded-full peer-checked:translate-x-[29px] transform transition-transform bg-[#fff]"></span>
             </label>
           </label>
+          {/* 헬퍼 상태에 따라 조건부로 렌더링 */}
+          {isHelper && (
           <div className=" w-full h-auto py-[20px] px-[24px] bg-[#fff] rounded-[4px]">
             <form action="/help_req/settings_helper_main" className="flex flex-col items-center gap-y-[19px] w-full h-auto">
               <p className="text-[#090A0A] text-[17px] font-[700] tracking-[-0.8px] leading-[117%] text-left w-full">최근 도움 요청</p>
@@ -101,6 +128,7 @@ export default function Main() {
               </Link>
             </form>
           </div>
+              )}
         </div>
         <Link href="#" className="flex flex-row items-center justify-between w-full py-[12px] px-[24px] bg-transparent border border-[#D9D9D9] rounded-[4px]">
           <div className="flex flex-col gap-y-[3px] ">
