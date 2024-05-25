@@ -4,9 +4,61 @@ import NavBar from "@/components/common/Sub/navBar";
 import modal from "@/components/common/Sub/navBar";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 export default function Main() {
   const router = useRouter();
+  const { id } = router.query;
+  const [requestDetails, setRequestDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (id) {
+      const fetchRequestDetails = async () => {
+        try {
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/request-details/${id}/`);
+          if (response.data.status === 'success') {
+            setRequestDetails(response.data.data);
+          } else {
+            console.error('Failed to fetch request details:', response.data.message);
+          }
+          setIsLoading(false);
+        } catch (error) {
+          console.error('Error fetching request details:', error);
+          setIsLoading(false);
+        }
+      };
+
+      fetchRequestDetails();
+    }
+  }, [id]);
+
+  const handleResponse = async (response) => {
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/respond-to-request/${id}/${response}/`,
+        {},
+        { withCredentials: true }
+      );
+      if (res.data.status === 'success') {
+        console.log('Request response submitted successfully');
+        router.push('/help_req/settings_helper_main');
+      } else {
+        console.error('Failed to submit request response:', res.data.message);
+      }
+    } catch (error) {
+      console.error('Error submitting request response:', error);
+    }
+  };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!requestDetails) {
+    return <p>Request not found.</p>;
+  }
+
   return (
     <>
       <Head>
@@ -53,7 +105,7 @@ export default function Main() {
                   <p className="text-[#232323] text-[17px] font-[500] tracking-[-0.8px] leading-[117%]">내 위치에서 500M</p>
                 </div>
               </div>
-              <Link href="tel:050-1234-5678" className="bg-primary flex items-center justify-center py-[13px] px-[15px] rounded-[48px] text-[#fff] w-full text-[18px] font-[700] tracking-[-0.8px] hover:opacity-70">
+              <Link href={`tel:${requestDetails.phone_number}`} className="bg-primary flex items-center justify-center py-[13px] px-[15px] rounded-[48px] text-[#fff] w-full text-[18px] font-[700] tracking-[-0.8px] hover:opacity-70">
                 바로 전화하기
               </Link>
               <Link href="/" className="text-[#232323] text-[15px] font-[700] leading-[110%] tracking-[-0.2px] hover:opacity-70">
