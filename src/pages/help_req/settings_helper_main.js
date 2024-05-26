@@ -140,6 +140,20 @@ export default function Main() {
       console.error('Error toggling helper status:', error);
     }
   };
+
+      // 날짜와 시간 형식 변환 함수
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    };
+    return date.toLocaleString('ko-KR', options);
+  };
   
   return (
     <>
@@ -190,7 +204,7 @@ export default function Main() {
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M12 8V12L14.5 13M20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12Z" stroke="#131214" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                    <p className="text-[#232323] text-[17px] font-[500] tracking-[-0.8px] leading-[117%]">{request.created_at}</p>
+                    <p className="text-[#232323] text-[17px] font-[500] tracking-[-0.8px] leading-[117%]">{formatDateTime(request.created_at)}</p>
                   </div>
                   <div className="w-full flex items-center gap-x-[10px]">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
