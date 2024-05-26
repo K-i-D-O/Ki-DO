@@ -14,12 +14,36 @@ import "@/styles/globals.css";
 import "@/styles/aos.css";
 import "@/styles/layout.css";
 import { useRouter } from "next/router";
+import { messaging, getToken } from '../utils/firebase';
 
 const store = createStore();
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
-
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator && messaging) {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          navigator.serviceWorker.ready.then(registration => {
+            getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY, serviceWorkerRegistration: registration })
+              .then((currentToken) => {
+                if (currentToken) {
+                  console.log('current token for client: ', currentToken);
+                  // Store token to use later
+                } else {
+                  console.log('No registration token available. Request permission to generate one.');
+                }
+              })
+              .catch((err) => {
+                console.log('An error occurred while retrieving token. ', err);
+              });
+          });
+        }
+      });
+    }
+  }, []);
+  
   // Google Analytics 조회수 측정하기 (유입, 이탈)
   useEffect(() => {
     const handleRouteChange = (url) => {};
