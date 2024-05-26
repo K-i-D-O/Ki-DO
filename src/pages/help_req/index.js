@@ -63,7 +63,7 @@ export default function Main() {
         { withCredentials: true }
       );
       if (response.data.status === 'success') {
-        router.push('/help_req/re_req_waiting')
+        router.push('/help_req/req_waiting')
       } else {
         console.error('도움 요청 실패:', response.data.message);
       }

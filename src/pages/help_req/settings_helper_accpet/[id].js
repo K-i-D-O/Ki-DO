@@ -108,7 +108,7 @@ export default function Main() {
               <Link href={`tel:${requestDetails.phone_number}`} className="bg-primary flex items-center justify-center py-[13px] px-[15px] rounded-[48px] text-[#fff] w-full text-[18px] font-[700] tracking-[-0.8px] hover:opacity-70">
                 바로 전화하기
               </Link>
-              <Link href="/" className="text-[#232323] text-[15px] font-[700] leading-[110%] tracking-[-0.2px] hover:opacity-70">
+              <Link href="/help_req/settings_helper_main" className="text-[#232323] text-[15px] font-[700] leading-[110%] tracking-[-0.2px] hover:opacity-70">
                 해결 완료
               </Link>
             </form>

@@ -1,11 +1,30 @@
 import Head from "next/head";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useEffect } from "react";
 import NavBar from "@/components/common/Sub/navBar";
 import Link from "next/link";
 import Script from "next/script";
 import Timer from "/public/etcjs/countDown.js";
+import { messaging, onMessage } from '../../utils/firebase';
+import { useRouter } from "next/router";
 
 export default function Main() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleNotification = (payload) => {
+      console.log('Message received. ', payload);
+      console.log(payload.data.url)
+      if (payload.data && payload.data.url) {
+        router.push(payload.data.url);
+      }
+    };
+
+    onMessage(messaging, (payload) => {
+      handleNotification(payload);
+    });
+
+  }, [router]);
+
   return (
     <>
       <Head>
@@ -22,7 +41,7 @@ export default function Main() {
             <br /> 전화가 올 때까지 잠시만 기다려주세요.
           </p>
           <Timer />
-          <Link href="/" class="bg-primary flex items-center justify-center py-[15px] px-[15px] rounded-[48px] text-[#fff] w-full text-[18px] font-[700] tracking-[-0.8px] hover:opacity-70">
+          <Link href="/" className="bg-primary flex items-center justify-center py-[15px] px-[15px] rounded-[48px] text-[#fff] w-full text-[18px] font-[700] tracking-[-0.8px] hover:opacity-70">
             처음 화면으로 돌아가기
           </Link>
           <Link href="/help_req/re_req_waiting" className="text-[#232323] text-[15px] font-[700] leading-[110%] tracking-[-0.2px] hover:opacity-70">

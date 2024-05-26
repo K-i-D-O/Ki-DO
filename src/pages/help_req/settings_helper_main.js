@@ -141,7 +141,30 @@ export default function Main() {
     }
   };
 
-      // 날짜와 시간 형식 변환 함수
+     // 요청 수락 및 거절 처리
+  const handleRequestResponse = async (requestId, response) => {
+    try {
+      const storedUsername = localStorage.getItem('guestUsername');
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/respond-to-request/${requestId}/${response}/`,
+        { kakao_id: storedUsername }, 
+        { withCredentials: true }
+      );
+      if (res.data.status === 'success') {
+        // Remove the processed request from the list
+        setRequests(requests.filter(request => request.id !== requestId));
+        if (response === 'accept') {
+          router.push(`/help_req/settings_helper_accpet/${requestId}`);
+        }
+      } else {
+        console.error(`Failed to ${response} request:`, res.data.message);
+      }
+    } catch (error) {
+      console.error(`Error ${response}ing request:`, error);
+    }
+  };
+
+  // 날짜와 시간 형식 변환 함수
   const formatDateTime = (dateTimeString) => {
     const date = new Date(dateTimeString);
     const options = {
@@ -154,6 +177,8 @@ export default function Main() {
     };
     return date.toLocaleString('ko-KR', options);
   };
+
+
   
   return (
     <>
@@ -214,12 +239,18 @@ export default function Main() {
                     <p className="text-[#232323] text-[17px] font-[500] tracking-[-0.8px] leading-[117%]">전화번호: {request.phone_number}</p>
                   </div>
                 </div>
-                <Link href={`/help_req/settings_helper_accpet/${request.id}`} className="bg-primary flex items-center justify-center py-[13px] px-[15px] rounded-[48px] text-[#fff] w-full text-[18px] font-[700] tracking-[-0.8px] hover:opacity-70">
-                  요청 수락하기
-                </Link>
-                <Link href="/" className="text-[#232323] text-[15px] font-[700] leading-[110%] tracking-[-0.2px] hover:opacity-70">
-                  요청 거절
-                </Link>
+                <button
+                    onClick={() => handleRequestResponse(request.id, 'accept')}
+                    className="bg-primary flex items-center justify-center py-[13px] px-[15px] rounded-[48px] text-[#fff] w-full text-[18px] font-[700] tracking-[-0.8px] hover:opacity-70"
+                  >
+                    요청 수락하기
+                  </button>
+                  <button
+                    onClick={() => handleRequestResponse(request.id, 'reject')}
+                    className="text-[#232323] text-[15px] font-[700] leading-[110%] tracking-[-0.2px] hover:opacity-70"
+                  >
+                    요청 거절
+                  </button>
               </div>
             ))
           ))}

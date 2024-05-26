@@ -22,12 +22,10 @@ messaging.setBackgroundMessageHandler(function (payload) {
   const notificationOptions = {
     body: payload.notification.body,
     icon: '/firebase-logo.png',
-    data: {
-        url: '/help_req/settings_helper_main'
-      }
+    data: { url: payload.data.url }
   };
 
-  return self.registration.showNotification(notificationTitle, notificationOptions);
+  self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
 self.addEventListener('notificationclick', function(event) {
