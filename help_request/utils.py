@@ -3,7 +3,7 @@ from firebase_admin import messaging
 from django.contrib.auth.models import User
 from .models import HelperProfile
 
-def send_push_notification(device_token, title, body, data, url):
+def send_push_notification(device_token, title, body, data):
     """
     FCM을 통해 푸시 알림을 보내는 함수
     """
@@ -13,7 +13,7 @@ def send_push_notification(device_token, title, body, data, url):
             body=body,
         ),
         token=device_token,
-        data={'url': url, **data},  # Add URL to the data payload
+        data={key: str(value) for key, value in data.items()}  # 모든 값을 문자열로 변환
     )
 
     try:
@@ -38,13 +38,11 @@ def send_push_notification_to_helpers(help_request):
                 helper.device_token,
                 'New Help Request',
                 f'New help request from {help_request.requester.username}',
-                {'request_id': str(help_request.id)},
-                url='http://localhost:3000/help_req/settings_helper_main'
+                {'request_id': str(help_request.id), 'url': 'http://localhost:3000/help_req/settings_helper_main'}
             )
             print(result)
             if not result['success']:
                 print(f"Failed to send notification to {helper.user.username}: {result['error']}")
-
 
 def send_push_notification_to_requester(help_request):
     """
@@ -55,5 +53,5 @@ def send_push_notification_to_requester(help_request):
             help_request.requester.helperprofile.device_token,
             'Help Request Accepted',
             f'Your help request was accepted by {help_request.helper.username}.',
-            {'helper_phone': help_request.helper.phone_number}
+            {'helper_phone': help_request.helper.helperprofile.phone_number, 'url': 'http://localhost:3000/help_req/req_success'}
         )

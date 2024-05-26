@@ -76,8 +76,6 @@ def become_helper(request):
         return JsonResponse({'status': 'error', 'message': 'Invalid data'}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
 
-
-
 @csrf_exempt
 def kakao_login_helper(request):
     if request.method == 'POST':
@@ -85,7 +83,6 @@ def kakao_login_helper(request):
         kakao_id = data['id']
         nickname = data['nickname']
         # print(data)
-
         try:
             # Check if a user with the given kakao_id already exists
             user = User.objects.get(username=kakao_id)
@@ -152,7 +149,6 @@ def kakao_callback(request):
         'id': kakao_id,
         'nickname': nickname
     }
-
     # Redirect to frontend with user data as query parameters
     return JsonResponse({'status': 'success', 'user_data': user_data}, status=200)
 
@@ -209,16 +205,39 @@ def get_request_details(request, request_id):
 
 @csrf_exempt
 def respond_to_request(request, request_id, response):
-    try:
-        help_request = HelpRequest.objects.get(id=request_id)
-        if response == 'accept':
-            help_request.helper = request.user
-            help_request.is_accepted = True
-            help_request.save()
-            send_push_notification_to_requester(help_request)
-        else:
-            # 요청 거절 처리
-            pass
-        return JsonResponse({'status': 'success'}, status=200)
-    except HelpRequest.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'Request not found'}, status=404)
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            kakao_id = data.get('kakao_id')
+
+            if not kakao_id:
+                return JsonResponse({'status': 'error', 'message': 'Kakao ID not provided'}, status=400)
+
+            try:
+                helper_profile = HelperProfile.objects.get(user__username=kakao_id)
+                if not helper_profile.is_helper:
+                    return JsonResponse({'status': 'error', 'message': 'User is not a helper'}, status=403)
+
+                try:
+                    help_request = HelpRequest.objects.get(id=request_id)
+                    if response == 'accept':
+                        help_request.helper = helper_profile.user
+                        help_request.is_accepted = True
+                        help_request.save()
+                        send_push_notification_to_requester(help_request)
+                    elif response == 'reject':
+                        help_request.is_accepted = False
+                        help_request.save()
+                        # 요청 거절 처리 로직 추가 가능
+                    else:
+                        return JsonResponse({'status': 'error', 'message': 'Invalid response type'}, status=400)
+
+                    return JsonResponse({'status': 'success'}, status=200)
+                except HelpRequest.DoesNotExist:
+                    return JsonResponse({'status': 'error', 'message': 'Request not found'}, status=404)
+            except HelperProfile.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': 'Helper profile not found'}, status=404)
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
