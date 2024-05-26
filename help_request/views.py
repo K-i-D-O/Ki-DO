@@ -227,7 +227,7 @@ def respond_to_request(request, request_id, response):
                         send_push_notification_to_requester(help_request)
                     elif response == 'reject':
                         help_request.is_accepted = False
-                        help_request.save()
+                        help_request.delete()
                         # 요청 거절 처리 로직 추가 가능
                     else:
                         return JsonResponse({'status': 'error', 'message': 'Invalid response type'}, status=400)
