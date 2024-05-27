@@ -8,7 +8,7 @@ const NavBar = ({ title, link }) => {
           history.back();
         }}
         href="#"
-        className="hover:opacity-[0.75]"
+        className="hover:opacity-[0.75] btn-history-back"
       >
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M18.4074 19.1851L13.2222 14M13.2222 14L18.4074 8.81478M13.2222 14H24.5M11.6659 23.3332H8.94368C7.01069 23.3332 5.44368 21.7662 5.44368 19.8332V8.1665C5.44368 6.23351 7.01069 4.6665 8.94368 4.6665H11.6659" stroke="#232323" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
