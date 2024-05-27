@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import NavBar from "@/components/common/Sub/navBar";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { messaging, getToken,onMessage } from '../../utils/firebase';
+import { messaging, getToken, onMessage } from '../../utils/firebase';
 import axios from 'axios';
 
 export default function Main() {
@@ -30,6 +30,22 @@ export default function Main() {
       console.error('Error saving token:', error);
     }
   };
+
+  // 날짜와 시간 형식 변환 함수
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    };
+    return date.toLocaleString('ko-KR', options);
+  };
+  
+  
   //헬퍼 푸시알림 전체목록
   useEffect(() => {
     const fetchRequests = async () => {
@@ -70,7 +86,6 @@ export default function Main() {
       
       onMessage(messaging, (payload) => {
         console.log('Message received. ', payload);
-        // Customize notification here
         const notificationTitle = payload.notification.title;
         const notificationOptions = {
           body: payload.notification.body,
@@ -84,7 +99,7 @@ export default function Main() {
     }
   }, []);
 
-  //본인인증 카카오로그인
+  // 본인인증 카카오로그인
   useEffect(() => {
     const { code } = router.query;
     if (code) {
@@ -105,6 +120,7 @@ export default function Main() {
           if (convertResponse.data.status === 'success') {
             localStorage.setItem('guestUsername', userData.id); // 업데이트된 guestUsername
             setIsHelper(true); // 헬퍼 상태로 전환
+            localStorage.setItem('isHelper', true); // 헬퍼 상태를 로컬 스토리지에 저장
             router.push('/help_req/settings_helper_main');
           } else {
             console.error('Failed to convert to helper:', convertResponse.data.message);
@@ -117,7 +133,13 @@ export default function Main() {
       sendCodeToBackend(code);
     }
   }, [router.query]);
-  
+
+  // 컴포넌트가 마운트될 때 로컬 스토리지에서 헬퍼 상태를 불러옴
+  useEffect(() => {
+    const savedIsHelper = localStorage.getItem('isHelper') === 'true';
+    setIsHelper(savedIsHelper);
+  }, []);
+
   //헬퍼 상태 변환
   const toggleHelperStatus = async (status) => {
     try {
@@ -133,6 +155,7 @@ export default function Main() {
       );
       if (response.data.status === 'success') {
         setIsHelper(status);
+        localStorage.setItem('isHelper', status); // 헬퍼 상태를 로컬 스토리지에 저장
       } else {
         console.error('Failed to toggle helper status:', response.data.message);
       }
@@ -141,7 +164,7 @@ export default function Main() {
     }
   };
 
-     // 요청 수락 및 거절 처리
+  // 요청 수락 및 거절 처리
   const handleRequestResponse = async (requestId, response) => {
     try {
       const storedUsername = localStorage.getItem('guestUsername');
@@ -151,7 +174,6 @@ export default function Main() {
         { withCredentials: true }
       );
       if (res.data.status === 'success') {
-        // Remove the processed request from the list
         setRequests(requests.filter(request => request.id !== requestId));
         if (response === 'accept') {
           router.push(`/help_req/settings_helper_accpet/${requestId}`);
@@ -164,22 +186,7 @@ export default function Main() {
     }
   };
 
-  // 날짜와 시간 형식 변환 함수
-  const formatDateTime = (dateTimeString) => {
-    const date = new Date(dateTimeString);
-    const options = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true
-    };
-    return date.toLocaleString('ko-KR', options);
-  };
 
-
-  
   return (
     <>
       <Head>
@@ -216,44 +223,52 @@ export default function Main() {
               <span className="absolute flex justify-center items-center w-[28px] h-[28px] left-[4px] rounded-full peer-checked:translate-x-[29px] transform transition-transform bg-[#fff]"></span>
             </label>
           </label>
-          {/* 헬퍼 상태에 따라 조건부로 렌더링 */}
           {isHelper && (
-            isLoading ? (
-              <p>Loading...</p>
-            ) : (
-            requests.map((request) => (
-              <div key={request.id} className="w-full h-auto py-[20px] px-[24px] bg-[#fff] rounded-[4px]">
-                <p className="text-[#090A0A] text-[17px] font-[700] tracking-[-0.8px] leading-[117%] text-left w-full">최근 도움 요청</p>
-                <div className="w-full flex flex-col items-center gap-y-[16px] bg-[#F7F8F9] border border-[#dfdfdf] rounded-[4px] p-[15px]">
-                  <div className="w-full flex items-center gap-x-[10px]">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12 8V12L14.5 13M20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12Z" stroke="#131214" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <p className="text-[#232323] text-[17px] font-[500] tracking-[-0.8px] leading-[117%]">{formatDateTime(request.created_at)}</p>
+              isLoading ? (
+                <p>Loading...</p>
+              ) : (
+                requests.map((request) => (
+                  <div key={request.id} className="w-full h-auto py-[20px] px-[24px] bg-[#fff] rounded-[4px]">
+                     <form 
+                       onSubmit={(e) => e.preventDefault()} // Prevent form submission
+                       className="flex flex-col items-center gap-y-[19px] w-full h-auto"
+                     >
+                      <p className="text-[#090A0A] text-[17px] font-[700] tracking-[-0.8px] leading-[117%] text-left w-full">최근 도움 요청</p>
+                      <div className="w-full flex flex-col items-center gap-y-[16px] bg-[#F7F8F9] border border-[#dfdfdf] rounded-[4px] p-[15px]">
+                        <div className="w-full flex items-center gap-x-[10px]">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 8V12L14.5 13M20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12Z" stroke="#131214" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                          <p className="text-[#232323] text-[17px] font-[500] tracking-[-0.8px] leading-[117%]">{formatDateTime(request.created_at)}</p>
+                        </div>
+                        <div className="w-full flex items-center gap-x-[10px]">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18.7292 10.8148C18.7292 14.4197 15.577 17.6744 13.5603 19.3877C12.5993 20.2041 11.2295 20.2041 10.2686 19.3877C8.25185 17.6743 5.09961 14.4197 5.09961 10.8148C5.09961 9.00741 5.8176 7.27404 7.09562 5.99601C8.37365 4.71799 10.107 4 11.9144 4C13.7218 4 15.4552 4.71799 16.7332 5.99601C18.0112 7.27404 18.7292 9.00741 18.7292 10.8148Z" stroke="#131214" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M11.9144 13.0864C13.169 13.0864 14.186 12.0694 14.186 10.8148C14.186 9.56024 13.169 8.54321 11.9144 8.54321C10.6598 8.54321 9.64282 9.56024 9.64282 10.8148C9.64282 12.0694 10.6598 13.0864 11.9144 13.0864Z" stroke="#131214" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                          <p className="text-[#232323] text-[17px] font-[500] tracking-[-0.8px] leading-[117%]">전화번호: {request.phone_number}</p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleRequestResponse(request.id, 'accept')}
+                        className="bg-primary flex items-center justify-center py-[13px] px-[15px] rounded-[48px] text-[#fff] w-full text-[18px] font-[700] tracking-[-0.8px] hover:opacity-70"
+                      >
+                        요청 수락하기
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleRequestResponse(request.id, 'reject')}
+                        className="text-[#232323] text-[15px] font-[700] leading-[110%] tracking-[-0.2px] hover:opacity-70"
+                      >
+                        요청 거절
+                      </button>
+                    </form>
                   </div>
-                  <div className="w-full flex items-center gap-x-[10px]">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M18.7292 10.8148C18.7292 14.4197 15.577 17.6744 13.5603 19.3877C12.5993 20.2041 11.2295 20.2041 10.2686 19.3877C8.25185 17.6743 5.09961 14.4197 5.09961 10.8148C5.09961 9.00741 5.8176 7.27404 7.09562 5.99601C8.37365 4.71799 10.107 4 11.9144 4C13.7218 4 15.4552 4.71799 16.7332 5.99601C18.0112 7.27404 18.7292 9.00741 18.7292 10.8148Z" stroke="#131214" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      <path d="M11.9144 13.0864C13.169 13.0864 14.186 12.0694 14.186 10.8148C14.186 9.56024 13.169 8.54321 11.9144 8.54321C10.6598 8.54321 9.64282 9.56024 9.64282 10.8148C9.64282 12.0694 10.6598 13.0864 11.9144 13.0864Z" stroke="#131214" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <p className="text-[#232323] text-[17px] font-[500] tracking-[-0.8px] leading-[117%]">전화번호: {request.phone_number}</p>
-                  </div>
-                </div>
-                <button
-                    onClick={() => handleRequestResponse(request.id, 'accept')}
-                    className="bg-primary flex items-center justify-center py-[13px] px-[15px] rounded-[48px] text-[#fff] w-full text-[18px] font-[700] tracking-[-0.8px] hover:opacity-70"
-                  >
-                    요청 수락하기
-                  </button>
-                  <button
-                    onClick={() => handleRequestResponse(request.id, 'reject')}
-                    className="text-[#232323] text-[15px] font-[700] leading-[110%] tracking-[-0.2px] hover:opacity-70"
-                  >
-                    요청 거절
-                  </button>
-              </div>
-            ))
-          ))}
+                ))
+              )
+            )}
+              
         </div>
         <Link href="#" className="flex flex-row items-center justify-between w-full py-[12px] px-[24px] bg-transparent border border-[#D9D9D9] rounded-[4px]">
           <div className="flex flex-col gap-y-[3px] ">
