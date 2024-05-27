@@ -11,24 +11,24 @@ export default function Main() {
   useEffect(() => {
     const guestLogin = async () => {
       try {
-        console.log('API URL:', process.env.NEXT_PUBLIC_DJANGO_API_URL);
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/guest-login/`); 
+        console.log("API URL:", process.env.NEXT_PUBLIC_DJANGO_API_URL);
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/guest-login/`);
         setUsername(response.data.username);
-        localStorage.setItem('guestUsername', response.data.username); //guestId 로컬스토리지에 저장
-        console.log('Guest Username Set in Local Storage:', response.data.username);
+        localStorage.setItem("guestUsername", response.data.username); //guestId 로컬스토리지에 저장
+        console.log("Guest Username Set in Local Storage:", response.data.username);
         setLoading(false);
       } catch (error) {
-        console.error('Failed to login as guest', error);
+        console.error("Failed to login as guest", error);
         setLoading(false);
       }
     };
-  
+
     guestLogin();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
   return (
     <>
       <Head>
@@ -97,6 +97,14 @@ export default function Main() {
           </Link>
         </div>
       </div>
+      <style>
+        {`
+          .btn-history-back {
+            opacity: 0;
+            pointer-events: none;
+          }
+        `}
+      </style>
     </>
   );
 }
