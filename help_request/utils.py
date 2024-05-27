@@ -36,8 +36,8 @@ def send_push_notification_to_helpers(help_request):
             print(f"Sending notification to {helper.user.username} with token {helper.device_token}")
             result = send_push_notification(
                 helper.device_token,
-                'New Help Request',
-                f'New help request from {help_request.requester.username}',
+                'KI-DO 도움요청',
+                f'주변에서 도움을 요청하였습니다. 요청한사람:{help_request.requester.username}',
                 {'request_id': str(help_request.id), 'url': 'http://localhost:3000/help_req/settings_helper_main'}
             )
             print(result)
@@ -51,7 +51,7 @@ def send_push_notification_to_requester(help_request):
     if help_request.requester.helperprofile.device_token:
         send_push_notification(
             help_request.requester.helperprofile.device_token,
-            'Help Request Accepted',
-            f'Your help request was accepted by {help_request.helper.username}.',
+            'KI-DO 도움요청이 수락되었습니다.',
+            f'KI-DO 도움요청서비스가 수락되었습니다. 수락한사람:{help_request.helper.username}.',
             {'helper_phone': help_request.helper.helperprofile.phone_number, 'url': 'http://localhost:3000/help_req/req_success'}
         )
