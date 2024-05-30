@@ -13,6 +13,7 @@ class HelperProfile(models.Model):
 class HelpRequest(models.Model):
     requester = models.ForeignKey(User, related_name='requests', on_delete=models.CASCADE)
     helper = models.ForeignKey(User, related_name='helps', on_delete=models.SET_NULL, null=True, blank=True)
+    phone_number = models.CharField(max_length=20)  # Add this line
     is_accepted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     
