@@ -7,7 +7,9 @@ export default function Main() {
   return (
     <>
       <Head>
-        <title>키도 - 키오스크 도우미</title>
+        <title>키도 - 키오스크 도우미</title> <link rel="icon" href="/imgs/favi-icon.png" />
+        <link rel="shortcut icon" href="/imgs/favi-icon.png" />
+        <link rel="apple-touch-icon-precomposed" href="/imgs/favi-icon.png" />
         <meta name="description" content="키도 - 키오스크 도우미" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

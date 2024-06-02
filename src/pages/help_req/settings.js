@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import NavBar from "@/components/common/Sub/navBar";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import axios from 'axios';
+import axios from "axios";
 
 export default function Main() {
   const router = useRouter();
@@ -11,30 +11,28 @@ export default function Main() {
 
   const toggleHelperStatus = async (status) => {
     try {
-      const storedUsername = localStorage.getItem('guestUsername');
-      console.log('Stored Username:', storedUsername);
+      const storedUsername = localStorage.getItem("guestUsername");
+      console.log("Stored Username:", storedUsername);
       if (!storedUsername) {
-        throw new Error('No guest username found in local storage');
+        throw new Error("No guest username found in local storage");
       }
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/become-helper/`,
-        { is_helper: status, username: storedUsername },
-        { withCredentials: true }
-      );
-      if (response.data.status === 'success') {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/become-helper/`, { is_helper: status, username: storedUsername }, { withCredentials: true });
+      if (response.data.status === "success") {
         setIsHelper(status);
       } else {
-        console.error('Failed to toggle helper status:', response.data.message);
+        console.error("Failed to toggle helper status:", response.data.message);
       }
     } catch (error) {
-      console.error('Error toggling helper status:', error);
+      console.error("Error toggling helper status:", error);
     }
   };
 
   return (
     <>
       <Head>
-        <title>키도 - 키오스크 도우미</title>
+        <title>키도 - 키오스크 도우미</title> <link rel="icon" href="/imgs/favi-icon.png" />
+        <link rel="shortcut icon" href="/imgs/favi-icon.png" />
+        <link rel="apple-touch-icon-precomposed" href="/imgs/favi-icon.png" />
         <meta name="description" content="키도 - 키오스크 도우미" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -55,15 +53,7 @@ export default function Main() {
               <p className="text-[#72777A] text-[14px] font-[500] tracking-[-0.8px] leading-[117%]">도움 요청 받기</p>
             </div>
             <label tabIndex="0" className="flex items-center relative w-max cursor-pointer !mb-0">
-              <input
-                type="checkbox"
-                tabIndex="-1"
-                id="change_unit_helper"
-                name="change_unit_helper"
-                className="custom-toggle-box peer appearance-none transition-colors cursor-pointer w-[65px] h-[36px] rounded-full !mt-0 focus:outline-none bg-[#d9d9d9] checked:!bg-primary"
-                checked={isHelper}
-                readOnly
-              />
+              <input type="checkbox" tabIndex="-1" id="change_unit_helper" name="change_unit_helper" className="custom-toggle-box peer appearance-none transition-colors cursor-pointer w-[65px] h-[36px] rounded-full !mt-0 focus:outline-none bg-[#d9d9d9] checked:!bg-primary" checked={isHelper} readOnly />
               <span className="absolute flex justify-center items-center w-[28px] h-[28px] left-[4px] rounded-full peer-checked:translate-x-[29px] transform transition-transform bg-[#fff]"></span>
             </label>
           </label>

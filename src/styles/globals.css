@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard-dynamic-subset.css');
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard-dynamic-subset.css");
 
 body {
-  font-family: 'Pretendard', sans-serif;
+  font-family: "Pretendard", sans-serif;
 }
 
 .modal {
@@ -31,7 +31,7 @@ body {
   padding-bottom: 6px !important;
 }
 
-.CalendarDay[aria-disabled='true'] {
+.CalendarDay[aria-disabled="true"] {
   background-color: rgba(0, 0, 0, 0.2);
 }
 

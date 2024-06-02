@@ -7,7 +7,9 @@ export default function Main() {
   return (
     <>
       <Head>
-        <title>키도 - 키오스크 도우미</title>
+        <title>키도 - 키오스크 도우미</title> <link rel="icon" href="/imgs/favi-icon.png" />
+        <link rel="shortcut icon" href="/imgs/favi-icon.png" />
+        <link rel="apple-touch-icon-precomposed" href="/imgs/favi-icon.png" />
         <meta name="description" content="키도 - 키오스크 도우미" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -16,15 +18,16 @@ export default function Main() {
       <div className="relative flex flex-col items-center justify-start w-full h-[calc(100%-48px)] px-[20px] bg-[#232323] pt-[20px] pb-[60px]">
         <img className="absolute bottom-[20px] left-[50%] translate-x-[-50%]  w-[90%]" src="/imgs/kiosk_list/status.svg" alt="status 이미지" />
         <div className="flex flex-col gap-y-[18px] items-center justify-center w-full overflow-y-auto  my-[5px] mb-[40px] pt-[70px] sm:pt-[16px] sm:mb-[20px]">
-          <Link href="/kiosk/food/kiosk_view_1" className="kiosk_mission_list relative duration-500 flex flex-row gap-x-[3px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 px-[16px] py-[15px] bg-[#DFDFDF] opacity-[0.85]">
+          <Link href="/kiosk/cafe/m1" className="kiosk_mission_list relative duration-500 flex flex-row gap-x-[3px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 px-[16px] py-[15px] lg:py-[25px] bg-[#DFDFDF] opacity-[0.85]">
             <div className="flex flex-col gap-y-[11px]">
-              <p className="text-[#232323] text-[16px] font-[700] tracking-[-0.8px] ">
-                치즈버거 세트를 주문해 볼까요?
-                <br /> 제일 간단한 버거 세트 주문하기
+              <p className="text-[#232323] text-[16px] lg:text-[18px] font-[700] tracking-[-0.8px] ">
+                음료를 주문해볼까요?
+                <br />
+                커피 2잔 주문하기
               </p>
               <div className="bg-primary flex items-center justify-center py-[8px] px-[12px] rounded-[48px] text-[#fff] w-[180px] text-[17px] font-[700] tracking-[-0.6px]">1단계 재도전</div>
             </div>
-            <img className="w-[100px] aspect-square" src="/imgs/kiosk_list/food_1.svg" alt="1단계 이미지" />
+            <img className="w-[100px] sm-w-[120px] lg:w-[130px]" src="/imgs/cafe/m1.png" alt="1단계 이미지" />
             <div className="absolute top-[-25px] left-[-10px]">
               <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_37_4912)">
@@ -43,27 +46,27 @@ export default function Main() {
               </svg>
             </div>
           </Link>
-          <Link href="/kiosk/food/kiosk_view_1" className="kiosk_mission_list duration-500 flex flex-row gap-x-[3px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 px-[16px] py-[15px] bg-[#fff]">
+          <Link href="/kiosk/food/kiosk_view_1" className="kiosk_mission_list duration-500 flex flex-row gap-x-[3px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 px-[16px] py-[15px] lg:py-[25px] bg-[#fff]">
             <div className="flex flex-col gap-y-[11px]">
-              <p className="text-[#232323] text-[16px] font-[700] tracking-[-0.8px] ">
+              <p className="text-[#232323] text-[16px] lg:text-[18px] font-[700] tracking-[-0.8px] ">
                 옵션을 변경해 볼까요?
                 <br />
                 제로콜라로 바꿔서 주문하기
               </p>
               <div className="bg-primary flex items-center justify-center py-[8px] px-[12px] rounded-[48px] text-[#fff] w-[180px] text-[17px] font-[700] tracking-[-0.6px]">2단계 도전</div>
             </div>
-            <img className="w-[100px] aspect-square" src="/imgs/kiosk_list/food_2.svg" alt="2단계 이미지" />
+            <img className="w-[100px] sm-w-[120px] lg:w-[130px]" src="/imgs/cafe/m2.png" alt="2단계 이미지" />
           </Link>
-          <Link href="/kiosk/food/kiosk_view_1" className="kiosk_mission_list duration-500 flex flex-row gap-x-[3px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 px-[16px] py-[15px] bg-[#fff]">
+          <Link href="/kiosk/food/kiosk_view_1" className="kiosk_mission_list duration-500 flex flex-row gap-x-[3px] items-center justify-between w-full border-[2px] border-primary rounded-[4px] hover:opacity-70 px-[16px] py-[15px] lg:py-[25px] bg-[#fff]">
             <div className="flex flex-col gap-y-[11px]">
-              <p className="text-[#232323] text-[16px] font-[700] tracking-[-0.8px] ">
+              <p className="text-[#232323] text-[16px] lg:text-[18px] font-[700] tracking-[-0.8px] ">
                 추가 주문해 볼까요?
                 <br />
                 너겟 8조각 추가 주문하기
               </p>
               <div className="bg-primary flex items-center justify-center py-[8px] px-[12px] rounded-[48px] text-[#fff] w-[180px] text-[17px] font-[700] tracking-[-0.6px]">3단계 도전</div>
             </div>
-            <img className="w-[100px] aspect-square" src="/imgs/kiosk_list/food_3.svg" alt="3단계 이미지" />
+            <img className="w-[100px] sm-w-[120px] lg:w-[130px]" src="/imgs/cafe/m3.png" alt="3단계 이미지" />
           </Link>
         </div>
       </div>
