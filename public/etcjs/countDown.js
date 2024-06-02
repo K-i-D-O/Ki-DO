@@ -9,7 +9,6 @@ const Timer = () => {
 
       if (remainingTime <= 0) {
         clearInterval(intervalId);
-        alert("타임아웃!");
       }
     }, 1000);
 
