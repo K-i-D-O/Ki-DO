@@ -1,8 +1,11 @@
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import NavBar from "@/components/common/Sub/navBar";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Main() {
+  const router = useRouter();
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
   useEffect(() => {
@@ -155,7 +158,27 @@ export default function Main() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar title="디지털 안내사 위치 보기" link="#"></NavBar>
-      <div className="flex flex-col items-center justify-center w-full h-[calc(100%-48px)] bg-[#232323]">{isScriptLoaded && <div id="map" style={{ width: "100%", height: "100%" }}></div>}</div>
+      <div className="relative flex flex-col items-center justify-center w-full h-[calc(100%-48px)] bg-[#232323]">
+        <div className="absolute w-[90%] grid grid-cols-2 bg-[#fff] top-[20px] left-[50%] translate-x-[-50%] z-[999] shadow-[1px_2px_8px_1px_rgba(0,0,0,0.25)]] p-[3px] border border-[#dfdfdf] rounded-[8px]">
+          <div
+            onClick={() => {
+              router.push("/helper_map");
+            }}
+            className="w-full bg-white py-[12px] px-[5px] flex items-center justify-center rounded-[8px] text-primary text-[17px] sm:text-[19px] font-[700] tracking-[-0.9px] leading-[140%] hover:opacity-70"
+          >
+            전체 안내사 보기
+          </div>
+          <div
+            onClick={() => {
+              router.push("/helper_map_neary_by");
+            }}
+            className="w-full bg-primary py-[12px] px-[5px] flex items-center justify-center rounded-[8px] text-white text-[17px] sm:text-[19px] font-[700] tracking-[-0.9px] leading-[140%] hover:opacity-70"
+          >
+            내 근처 안내사 보기
+          </div>
+        </div>
+        {isScriptLoaded && <div id="map" style={{ width: "100%", height: "100%" }}></div>}
+      </div>
     </>
   );
 }
