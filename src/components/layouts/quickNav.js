@@ -11,7 +11,7 @@ const footerLinks = [
 
 export default function QuickNav() {
   return (
-    <div className="relative flex justify-between px-[22px] bg-[#d9d9d9] w-full py-[8px] h-[69px] gap-x-[115px] lg:gap-x-[125px]">
+    <div className="relative flex justify-between px-[22px] bg-[#d9d9d9] w-full py-[8px] h-[69px] gap-x-[115px] lg:gap-x-[125px] z-[999]">
       <Link href="/kiosk" className="flex flex-col gap-y-[3px] items-center py-[5px] px-[12px] w-full bg-[#fff] rounded-[8px] shadow-[1px_2px_8px_1px_rgba(0,0,0,0.25)] hover:border-[2px] hover:border-primary duration-300">
         <svg className="w-[24px]" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g clip-path="url(#clip0_31_9025)">
