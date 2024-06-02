@@ -20,7 +20,6 @@ export default function Main() {
   }, []);
 
   const initMap = () => {
-
     const mapContainer = document.getElementById("map");
 
     if (!mapContainer) {
@@ -31,28 +30,27 @@ export default function Main() {
     const mapOption = {
       center: new window.kakao.maps.LatLng(37.55471954890439, 126.97078636597669), //중심좌표 서울역
       level: 3, //초기 지도 확대 정도
-
     };
 
     const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
     const infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 }); //말풍선
 
-    const polylines = []; 
-    const markers = []; 
+    const polylines = [];
+    const markers = [];
 
     //마커아이콘 설정
-    const normalIcon = new window.kakao.maps.MarkerImage('/imgs/marker.png', new window.kakao.maps.Size(20, 28));
-    const clickedIcon = new window.kakao.maps.MarkerImage('/imgs/eventmarker.png', new window.kakao.maps.Size(20, 28));
+    const normalIcon = new window.kakao.maps.MarkerImage("/imgs/marker.png", new window.kakao.maps.Size(20, 28));
+    const clickedIcon = new window.kakao.maps.MarkerImage("/imgs/eventmarker.png", new window.kakao.maps.Size(20, 28));
     //json 불러오기
-    fetch('/address.json') 
-      .then(response => {
+    fetch("/address.json")
+      .then((response) => {
         if (!response.ok) {
-          throw new Error('Network response was not ok ' + response.statusText);
+          throw new Error("Network response was not ok " + response.statusText);
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         const positions = data.positions;
 
         const regions = {};
@@ -79,7 +77,6 @@ export default function Main() {
                 position: markerPosition,
                 title: position.content,
                 image: normalIcon,
-
               });
 
               routeMarkers.push(marker);
@@ -91,19 +88,18 @@ export default function Main() {
               map,
               path,
               strokeWeight: 5,
-              strokeColor: '#232323',
+              strokeColor: "#232323",
               strokeOpacity: 0.85,
-              strokeStyle: 'solid'
+              strokeStyle: "solid",
             });
 
             //경로 클릭 이벤트
-            (function(polyline, routeMarkers) {
-              window.kakao.maps.event.addListener(polyline, 'click', function() {
+            (function (polyline, routeMarkers) {
+              window.kakao.maps.event.addListener(polyline, "click", function () {
                 for (const j of polylines) {
-                  j.polyline.setOptions({ strokeColor: '#232323' });
+                  j.polyline.setOptions({ strokeColor: "#232323" });
                 }
-                polyline.setOptions({ strokeColor: '#FF2F01' });
-
+                polyline.setOptions({ strokeColor: "#FF2F01" });
 
                 for (const j of markers) {
                   j.setImage(normalIcon);
@@ -116,17 +112,16 @@ export default function Main() {
 
               //마커 클릭 이벤트
               for (const marker of routeMarkers) {
-
-                (function(marker, polyline) {
-                  window.kakao.maps.event.addListener(marker, 'click', function() {
+                (function (marker, polyline) {
+                  window.kakao.maps.event.addListener(marker, "click", function () {
                     const content = `<div style="padding:5px; text-align:center; font-size:11px;">${marker.getTitle()}</div>`;
                     infowindow.setContent(content);
                     infowindow.open(map, marker);
 
                     for (const j of polylines) {
-                      j.polyline.setOptions({ strokeColor: '#232323' });
+                      j.polyline.setOptions({ strokeColor: "#232323" });
                     }
-                    polyline.setOptions({ strokeColor: '#FF2F01' });
+                    polyline.setOptions({ strokeColor: "#FF2F01" });
 
                     for (const j of markers) {
                       j.setImage(normalIcon);
@@ -141,8 +136,8 @@ export default function Main() {
           }
         }
       })
-      .catch(error => {
-        console.error('Error fetching positions:', error);
+      .catch((error) => {
+        console.error("Error fetching positions:", error);
       });
   };
 
@@ -157,9 +152,7 @@ export default function Main() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar title="디지털 안내사 위치 보기" link="#"></NavBar>
-      <div className="flex flex-col items-center justify-center w-full h-[calc(100%-48px)] bg-[#232323]">
-        {isScriptLoaded && <div id="map" style={{ width: "100%", height: "800px" }}></div>}
-      </div>
+      <div className="flex flex-col items-center justify-center w-full h-[calc(100%-48px)] bg-[#232323]">{isScriptLoaded && <div id="map" style={{ width: "100%", height: "100%" }}></div>}</div>
     </>
   );
 }
