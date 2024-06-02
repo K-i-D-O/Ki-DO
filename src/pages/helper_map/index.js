@@ -159,7 +159,7 @@ export default function Main() {
         <div className="absolute w-[90%] grid grid-cols-2 bg-[#fff] top-[20px] left-[50%] translate-x-[-50%] z-[999] shadow-[1px_2px_8px_1px_rgba(0,0,0,0.25)]] p-[3px] border border-[#dfdfdf] rounded-[8px]">
           <div
             onClick={() => {
-              router.push("/helper_map_neary_by");
+              router.push("/helper_map");
             }}
             className="w-full bg-primary py-[12px] px-[5px] flex items-center justify-center rounded-[8px] text-white text-[17px] sm:text-[19px] font-[700] tracking-[-0.9px] leading-[140%] hover:opacity-70"
           >
