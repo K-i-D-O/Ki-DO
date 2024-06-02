@@ -32,10 +32,11 @@ export default function Main() {
   return (
     <>
       <Head>
-        <title>키도 - 키오스크 도우미</title>
+        <title>키도 - 키오스크 도우미</title> <link rel="icon" href="/imgs/favi-icon.png" />
+        <link rel="shortcut icon" href="/imgs/favi-icon.png" />
+        <link rel="apple-touch-icon-precomposed" href="/imgs/favi-icon.png" />
         <meta name="description" content="키도 - 키오스크 도우미" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar title="홈화면" link="#"></NavBar>
       <div className="flex flex-col items-center justify-center w-full h-[calc(100%-48px)] overflow-y-auto px-[20px] bg-[#232323] py-[20px]">

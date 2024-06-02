@@ -17,14 +17,14 @@ export default function Main() {
       const fetchRequestDetails = async () => {
         try {
           const response = await axios.get(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/request-details/${id}/`);
-          if (response.data.status === 'success') {
+          if (response.data.status === "success") {
             setRequestDetails(response.data.data);
           } else {
-            console.error('Failed to fetch request details:', response.data.message);
+            console.error("Failed to fetch request details:", response.data.message);
           }
           setIsLoading(false);
         } catch (error) {
-          console.error('Error fetching request details:', error);
+          console.error("Error fetching request details:", error);
           setIsLoading(false);
         }
       };
@@ -35,19 +35,15 @@ export default function Main() {
 
   const handleResponse = async (response) => {
     try {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/respond-to-request/${id}/${response}/`,
-        {},
-        { withCredentials: true }
-      );
-      if (res.data.status === 'success') {
-        console.log('Request response submitted successfully');
-        router.push('/help_req/settings_helper_main');
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/respond-to-request/${id}/${response}/`, {}, { withCredentials: true });
+      if (res.data.status === "success") {
+        console.log("Request response submitted successfully");
+        router.push("/help_req/settings_helper_main");
       } else {
-        console.error('Failed to submit request response:', res.data.message);
+        console.error("Failed to submit request response:", res.data.message);
       }
     } catch (error) {
-      console.error('Error submitting request response:', error);
+      console.error("Error submitting request response:", error);
     }
   };
 
@@ -62,7 +58,9 @@ export default function Main() {
   return (
     <>
       <Head>
-        <title>키도 - 키오스크 도우미</title>
+        <title>키도 - 키오스크 도우미</title> <link rel="icon" href="/imgs/favi-icon.png" />
+        <link rel="shortcut icon" href="/imgs/favi-icon.png" />
+        <link rel="apple-touch-icon-precomposed" href="/imgs/favi-icon.png" />
         <meta name="description" content="키도 - 키오스크 도우미" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

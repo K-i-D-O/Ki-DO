@@ -4,7 +4,7 @@ import NavBar from "@/components/common/Sub/navBar";
 import Link from "next/link";
 import Script from "next/script";
 import Timer from "/public/etcjs/countDown.js";
-import { messaging, onMessage } from '../../utils/firebase';
+import { messaging, onMessage } from "../../utils/firebase";
 import { useRouter } from "next/router";
 
 export default function Main() {
@@ -12,8 +12,8 @@ export default function Main() {
 
   useEffect(() => {
     const handleNotification = (payload) => {
-      console.log('Message received. ', payload);
-      console.log(payload.data.url)
+      console.log("Message received. ", payload);
+      console.log(payload.data.url);
       if (payload.data && payload.data.url) {
         router.push(payload.data.url);
       }
@@ -22,13 +22,14 @@ export default function Main() {
     onMessage(messaging, (payload) => {
       handleNotification(payload);
     });
-
   }, [router]);
 
   return (
     <>
       <Head>
-        <title>키도 - 키오스크 도우미</title>
+        <title>키도 - 키오스크 도우미</title> <link rel="icon" href="/imgs/favi-icon.png" />
+        <link rel="shortcut icon" href="/imgs/favi-icon.png" />
+        <link rel="apple-touch-icon-precomposed" href="/imgs/favi-icon.png" />
         <meta name="description" content="키도 - 키오스크 도우미" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

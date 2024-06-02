@@ -5,12 +5,11 @@ import modal from "@/components/common/Sub/navBar";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-
 export default function Main() {
   const router = useRouter();
 
-  const KAKAO_CLIENT_ID = 'efb6faf4cdddaddd5f04d3cda75e0612';
-  const REDIRECT_URI = 'http://localhost:3000/help_req/settings_helper_main';
+  const KAKAO_CLIENT_ID = "efb6faf4cdddaddd5f04d3cda75e0612";
+  const REDIRECT_URI = "http://localhost:3000/help_req/settings_helper_main";
 
   const handleKakaoLogin = () => {
     window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
@@ -19,7 +18,9 @@ export default function Main() {
   return (
     <>
       <Head>
-        <title>키도 - 키오스크 도우미</title>
+        <title>키도 - 키오스크 도우미</title> <link rel="icon" href="/imgs/favi-icon.png" />
+        <link rel="shortcut icon" href="/imgs/favi-icon.png" />
+        <link rel="apple-touch-icon-precomposed" href="/imgs/favi-icon.png" />
         <meta name="description" content="키도 - 키오스크 도우미" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
