@@ -7,20 +7,22 @@ export default function Main() {
 
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=d4f6ddfa47f0df86e4a068edbc2d4582&autoload=false"; 
+    script.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=d4f6ddfa47f0df86e4a068edbc2d4582&autoload=false";
     script.async = true;
     document.head.appendChild(script);
 
     script.onload = () => {
-      setIsScriptLoaded(true); 
-      window.kakao.maps.load(() => { 
-        initMap(); 
+      setIsScriptLoaded(true);
+      window.kakao.maps.load(() => {
+        initMap();
       });
     };
   }, []);
 
   const initMap = () => {
-    const mapContainer = document.getElementById('map'); 
+
+    const mapContainer = document.getElementById("map");
+
     if (!mapContainer) {
       console.error("#map 요소를 찾을 수 없습니다.");
       return;
@@ -28,12 +30,14 @@ export default function Main() {
 
     const mapOption = {
       center: new window.kakao.maps.LatLng(37.55471954890439, 126.97078636597669), //중심좌표 서울역
-      level: 3 //초기 지도 확대 정도
+      level: 3, //초기 지도 확대 정도
+
     };
 
     const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
     const infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 }); //말풍선
+
     const polylines = []; 
     const markers = []; 
 
@@ -74,7 +78,8 @@ export default function Main() {
                 map,
                 position: markerPosition,
                 title: position.content,
-                image: normalIcon
+                image: normalIcon,
+
               });
 
               routeMarkers.push(marker);
@@ -99,6 +104,7 @@ export default function Main() {
                 }
                 polyline.setOptions({ strokeColor: '#FF2F01' });
 
+
                 for (const j of markers) {
                   j.setImage(normalIcon);
                 }
@@ -110,6 +116,7 @@ export default function Main() {
 
               //마커 클릭 이벤트
               for (const marker of routeMarkers) {
+
                 (function(marker, polyline) {
                   window.kakao.maps.event.addListener(marker, 'click', function() {
                     const content = `<div style="padding:5px; text-align:center; font-size:11px;">${marker.getTitle()}</div>`;
@@ -142,7 +149,9 @@ export default function Main() {
   return (
     <>
       <Head>
-        <title>키도 - 키오스크 도우미</title>
+        <title>키도 - 키오스크 도우미</title> <link rel="icon" href="/imgs/favi-icon.png" />
+        <link rel="shortcut icon" href="/imgs/favi-icon.png" />
+        <link rel="apple-touch-icon-precomposed" href="/imgs/favi-icon.png" />
         <meta name="description" content="키도 - 키오스크 도우미" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
