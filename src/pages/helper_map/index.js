@@ -21,6 +21,7 @@ export default function Main() {
 
   const initMap = () => {
     const mapContainer = document.getElementById("map");
+
     if (!mapContainer) {
       console.error("#map 요소를 찾을 수 없습니다.");
       return;
@@ -34,6 +35,7 @@ export default function Main() {
     const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
     const infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 }); //말풍선
+
     const polylines = [];
     const markers = [];
 
