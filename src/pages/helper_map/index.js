@@ -27,12 +27,13 @@ export default function Main() {
 
     if (!mapContainer) {
       console.error("#map 요소를 찾을 수 없습니다.");
+      location.reload();
       return;
     }
 
     const mapOption = {
       center: new window.kakao.maps.LatLng(37.55471954890439, 126.97078636597669), //중심좌표 서울역
-      level: 3, //초기 지도 확대 정도
+      level: 5, //초기 지도 확대 정도
     };
 
     const map = new window.kakao.maps.Map(mapContainer, mapOption);
@@ -165,14 +166,9 @@ export default function Main() {
           >
             전체 안내사 보기
           </div>
-          <div
-            onClick={() => {
-              router.push("/helper_map_neary_by");
-            }}
-            className="w-full bg-white py-[12px] px-[5px] flex items-center justify-center rounded-[8px] text-primary text-[17px] sm:text-[19px] font-[700] tracking-[-0.9px] leading-[140%] hover:opacity-70"
-          >
+          <Link href="./helper_map_neary_by" className="w-full bg-white py-[12px] px-[5px] flex items-center justify-center rounded-[8px] text-primary text-[17px] sm:text-[19px] font-[700] tracking-[-0.9px] leading-[140%] hover:opacity-70">
             내 근처 안내사 보기
-          </div>
+          </Link>
         </div>
         {isScriptLoaded && <div id="map" style={{ width: "100%", height: "100%" }}></div>}
       </div>

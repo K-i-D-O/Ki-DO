@@ -25,9 +25,14 @@ export default function Main() {
     const mapContainer = document.getElementById("map");
     const mapOption = {
       center: new window.kakao.maps.LatLng(37.55471954890439, 126.97078636597669), //중심좌표 서울역
-      level: 4,
+      level: 5,
     };
 
+    if (!mapContainer) {
+      console.error("#map 요소를 찾을 수 없습니다.");
+      location.reload();
+      return;
+    }
     const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
     const polylines = [];
