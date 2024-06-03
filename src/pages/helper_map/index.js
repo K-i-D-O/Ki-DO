@@ -171,7 +171,7 @@ export default function Main() {
             }}
             className="w-full bg-white py-[12px] px-[5px] flex items-center justify-center rounded-[8px] text-primary text-[17px] sm:text-[19px] font-[700] tracking-[-0.9px] leading-[140%] hover:opacity-70"
           >
-            전체 안내사 보기
+            내 근처 안내사 보기
           </div>
         </div>
         {isScriptLoaded && <div id="map" style={{ width: "100%", height: "100%" }}></div>}
