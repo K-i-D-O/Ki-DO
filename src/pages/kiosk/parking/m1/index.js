@@ -15,7 +15,7 @@ export default function Main() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar title="도전 1단계!" link="#"></NavBar>
-      <div className="relative flex flex-col items-center justify-center w-full h-[calc(100%-48px)] px-[20px] bg-[#232323] pt-[20px] pb-[60px]">
+      <div className="relative flex flex-col items-center justify-center w-full h-[calc(100%-48px)] px-[20px] bg-[#232323] py-[20px]">
         <div className="absolute flex flex-col items-center justify-between gap-y-[15px] p-[18px] w-[92%] h-[94%] bg-[#fff] top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%] border-[3px] border-primary shadow-md rounded-[4px]">
           <div className="flex flex-row justify-between w-full">
             <svg className="opacity-0" width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
