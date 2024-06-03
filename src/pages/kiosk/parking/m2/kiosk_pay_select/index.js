@@ -45,7 +45,7 @@ export default function Main() {
               카드결제<span className="text-[13px] lg:text-[14px]"> (카드, 삼성페이, 애플페이)</span>
             </p>
             <div className="w-full grid grid-cols-3 gap-[8px]">
-              <Link href="./kiosk_card" className="w-full hover:opacity-70">
+              <Link href="./kiosk_card" className="w-full hover:opacity-70 min-h-[50px]">
                 <img className="w-full pointer-events-none" src="/imgs/pay_method/card.svg" />
               </Link>
             </div>
@@ -55,13 +55,13 @@ export default function Main() {
               간편결제<span className="text-[13px] lg:text-[14px]"> (바코드 방식)</span>
             </p>
             <div className="w-full grid grid-cols-3 gap-[8px]">
-              <Link href="./kiosk_barcode" className="w-full hover:opacity-70">
+              <Link href="./kiosk_barcode" className="w-full hover:opacity-70 min-h-[50px]">
                 <img className="w-full pointer-events-none" src="/imgs/pay_method/kakao.svg" />
               </Link>
-              <Link href="./kiosk_barcode" className="w-full hover:opacity-70">
+              <Link href="./kiosk_barcode" className="w-full hover:opacity-70 min-h-[50px]">
                 <img className="w-full pointer-events-none" src="/imgs/pay_method/naver.svg" />
               </Link>
-              <Link href="./kiosk_barcode" className="w-full hover:opacity-70">
+              <Link href="./kiosk_barcode" className="w-full hover:opacity-70 min-h-[50px]">
                 <img className="w-full pointer-events-none" src="/imgs/pay_method/payco.svg" />
               </Link>
             </div>

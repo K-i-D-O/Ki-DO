@@ -95,7 +95,7 @@ export default function Main() {
               기타결제<span className="text-[13px] lg:text-[14px]"> (쿠폰, 기프티콘)</span>
             </p>
             <div className="w-full grid grid-cols-2 gap-[8px]">
-              <Link href="./kiosk_coupon" className="w-full hover:opacity-70">
+              <Link href="./kiosk_coupon" className="w-full hover:opacity-70 min-h-[50px]">
                 <img className="w-full pointer-events-none" src="/imgs/pay_method/coupon.svg" />
               </Link>
             </div>
