@@ -16,7 +16,10 @@ const app = initializeApp(firebaseConfig);
 
 let messaging;
 if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+  console.log('Initializing messaging...');
   messaging = getMessaging(app);
+} else {
+  console.log('Service Worker or Window not available');
 }
 
 export { messaging, getToken,onMessage };
