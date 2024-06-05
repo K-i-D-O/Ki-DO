@@ -37,18 +37,23 @@ export default function Main() {
         if (permission === 'granted') {
           navigator.serviceWorker.register('/firebase-messaging-sw.js').then(registration => {
             console.log('Service Worker registered:', registration);
-            getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY, serviceWorkerRegistration: registration })
-              .then((currentToken) => {
-                if (currentToken) {
-                  console.log('Current token for client:', currentToken);
-                  saveTokenToServer(currentToken);
-                } else {
-                  console.log('No registration token available. Request permission to generate one.');
-                }
-              })
-              .catch((err) => {
-                console.error('An error occurred while retrieving token:', err);
-              });
+            navigator.serviceWorker.ready.then(readyRegistration => {
+              console.log('Service Worker is active and ready:', readyRegistration);
+              getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY, serviceWorkerRegistration: readyRegistration })
+                .then((currentToken) => {
+                  if (currentToken) {
+                    console.log('Current token for client:', currentToken);
+                    saveTokenToServer(currentToken);
+                  } else {
+                    console.log('No registration token available. Request permission to generate one.');
+                  }
+                })
+                .catch((err) => {
+                  console.error('An error occurred while retrieving token:', err);
+                });
+            }).catch(err => {
+              console.error('Service Worker ready failed:', err);
+            });
           }).catch(err => {
             console.error('Service Worker registration failed:', err);
           });
