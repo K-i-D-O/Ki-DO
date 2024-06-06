@@ -8,13 +8,8 @@ import { useRouter } from "next/router";
 export default function Main() {
   const router = useRouter();
 
-<<<<<<< Updated upstream
-  const KAKAO_CLIENT_ID = "efb6faf4cdddaddd5f04d3cda75e0612";
-  const REDIRECT_URI = "http://localhost:3000/help_req/settings_helper_main";
-=======
   const KAKAO_CLIENT_ID = 'efb6faf4cdddaddd5f04d3cda75e0612';
   const REDIRECT_URI = 'https://ki-do.kr/help_req/settings_helper_main';
->>>>>>> Stashed changes
 
   const handleKakaoLogin = () => {
     window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
