@@ -88,7 +88,7 @@ export default function Main() {
         };
 
         if (Notification.permission === "granted") {
-          new Notification(notificationTitle, notificationOptions);
+          registration.showNotification(notificationTitle, notificationOptions);
         }
       });
     }
