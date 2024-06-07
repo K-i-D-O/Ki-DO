@@ -63,11 +63,14 @@ export default function Main() {
       Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
           navigator.serviceWorker.ready.then((registration) => {
-            getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY, serviceWorkerRegistration: registration })
+            getToken(messaging, {
+              vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
+              serviceWorkerRegistration: registration
+            })
               .then((currentToken) => {
                 if (currentToken) {
                   console.log("current token for client: ", currentToken);
-                  saveTokenToServer(currentToken);
+                  saveTokenToServer(currentToken); // 적절한 함수로 대체하세요
                 } else {
                   console.log("No registration token available. Request permission to generate one.");
                 }
@@ -75,20 +78,22 @@ export default function Main() {
               .catch((err) => {
                 console.log("An error occurred while retrieving token. ", err);
               });
+
+            onMessage(messaging, (payload) => {
+              console.log("Message received. ", payload);
+              if (payload.notification) {
+                const notificationTitle = payload.notification.title;
+                const notificationOptions = {
+                  body: payload.notification.body,
+                  icon: payload.notification.icon,
+                };
+
+                if (Notification.permission === "granted") {
+                  registration.showNotification(notificationTitle, notificationOptions);
+                }
+              }
+            });
           });
-        }
-      });
-
-      onMessage(messaging, (payload) => {
-        console.log("Message received. ", payload);
-        const notificationTitle = payload.notification.title;
-        const notificationOptions = {
-          body: payload.notification.body,
-          icon: payload.notification.icon,
-        };
-
-        if (Notification.permission === "granted") {
-          registration.showNotification(notificationTitle, notificationOptions);
         }
       });
     }
