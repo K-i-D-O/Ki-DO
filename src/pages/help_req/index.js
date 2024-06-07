@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import NavBar from "@/components/common/Sub/navBar";
 import Link from "next/link";
 import axios from "axios";
-import { messaging, getToken ,onMessage } from "../../utils/firebase";
+import { messaging, getToken, onMessage } from "../../utils/firebase";
 
 const bg_img = { backgroundImage: "url('/imgs/help_req.svg')" };
 
@@ -27,7 +27,7 @@ export default function Main() {
     }
   };
 
-  
+  // FCM 초기화 및 토큰 저장
   useEffect(() => {
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
       Notification.requestPermission().then(permission => {
@@ -35,22 +35,32 @@ export default function Main() {
         if (permission === 'granted') {
           navigator.serviceWorker.register('/firebase-messaging-sw.js').then(registration => {
             console.log('Service Worker registered:', registration);
-            navigator.serviceWorker.ready.then(readyRegistration => {
-              console.log('Service Worker is active and ready:', readyRegistration);
-              getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY, serviceWorkerRegistration: readyRegistration })
-                .then((currentToken) => {
-                  if (currentToken) {
-                    console.log('Current token for client:', currentToken);
-                    saveTokenToServer(currentToken);
-                  } else {
-                    console.log('No registration token available. Request permission to generate one.');
-                  }
-                })
-                .catch((err) => {
-                  console.error('An error occurred while retrieving token:', err);
-                });
-            }).catch(err => {
-              console.error('Service Worker ready failed:', err);
+            getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY, serviceWorkerRegistration: registration })
+              .then((currentToken) => {
+                if (currentToken) {
+                  console.log('Current token for client:', currentToken);
+                  saveTokenToServer(currentToken);
+                } else {
+                  console.log('No registration token available. Request permission to generate one.');
+                }
+              })
+              .catch((err) => {
+                console.error('An error occurred while retrieving token:', err);
+              });
+
+            onMessage(messaging, (payload) => {
+              console.log("Message received. ", payload);
+              if (payload.notification) {
+                const notificationTitle = payload.notification.title;
+                const notificationOptions = {
+                  body: payload.notification.body,
+                  icon: payload.notification.icon,
+                };
+
+                if (Notification.permission === "granted") {
+                  registration.showNotification(notificationTitle, notificationOptions);
+                }
+              }
             });
           }).catch(err => {
             console.error('Service Worker registration failed:', err);
@@ -63,61 +73,6 @@ export default function Main() {
       console.error('Service Worker not supported or Window not defined');
     }
   }, []);
-
-
-    // // 웹페이지가 닫혀있을 때 푸시 알림
-    // useEffect(() => {
-    //   if (typeof window !== "undefined" && "serviceWorker" in navigator) {
-    //     Notification.requestPermission().then((permission) => {
-    //       if (permission === "granted") {
-    //         navigator.serviceWorker.ready.then((registration) => {
-    //           let currentToken = getTokenFromStorage();
-  
-    //           if (!currentToken) {
-    //             getToken(messaging, {
-    //               vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
-    //               serviceWorkerRegistration: registration
-    //             })
-    //               .then((newToken) => {
-    //                 if (newToken) {
-    //                   console.log("New token for client: ", newToken);
-    //                   saveTokenToServer(newToken);
-    //                 } else {
-    //                   console.log("No registration token available. Request permission to generate one.");
-    //                 }
-    //               })
-    //               .catch((err) => {
-    //                 console.log("An error occurred while retrieving token. ", err);
-    //               });
-    //           } else {
-    //             console.log("Token retrieved from storage: ", currentToken);
-    //           }
-  
-    //           onMessage(messaging, (payload) => {
-    //             console.log("Message received. ", payload);
-    //             if (payload.notification) {
-    //               const notificationTitle = payload.notification.title;
-    //               const notificationOptions = {
-    //                 body: payload.notification.body,
-    //                 icon: payload.notification.icon,
-    //               };
-  
-    //               if (Notification.permission === "granted") {
-    //                 registration.showNotification(notificationTitle, notificationOptions);
-    //               }
-    //             }
-    //           });
-    //         });
-    //       }
-    //     });
-    //   }
-    // }, []);
-
-  //   // 로컬 스토리지에서 토큰 불러오기
-  // const getTokenFromStorage = () => {
-  //   return localStorage.getItem("fcmToken");
-  // };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -137,7 +92,8 @@ export default function Main() {
   return (
     <>
       <Head>
-        <title>키도 - 키오스크 도우미</title> <link rel="icon" href="/imgs/favi-icon.png" />
+        <title>키도 - 키오스크 도우미</title>
+        <link rel="icon" href="/imgs/favi-icon.png" />
         <link rel="shortcut icon" href="/imgs/favi-icon.png" />
         <link rel="apple-touch-icon-precomposed" href="/imgs/favi-icon.png" />
         <meta name="description" content="키도 - 키오스크 도우미" />
