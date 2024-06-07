@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import NavBar from "@/components/common/Sub/navBar";
 import Link from "next/link";
 import axios from "axios";
-import { messaging, getToken } from "../../utils/firebase";
+import { messaging, getToken ,onMessage } from "../../utils/firebase";
 
 const bg_img = { backgroundImage: "url('/imgs/help_req.svg')" };
 
