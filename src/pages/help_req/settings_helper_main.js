@@ -52,7 +52,8 @@ export default function Main() {
     const fetchRequests = async () => {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/requests/`);
-        setRequests(response.data.requests);
+        const sortedRequests = response.data.requests.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        setRequests(sortedRequests);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching requests:", error);
