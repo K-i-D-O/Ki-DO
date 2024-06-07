@@ -33,23 +33,36 @@ export default function Main() {
   useEffect(() => {
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
       Notification.requestPermission().then(permission => {
+        console.log('Notification permission status:', permission);
         if (permission === 'granted') {
-          navigator.serviceWorker.ready.then(registration => {
-            getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY, serviceWorkerRegistration: registration })
-              .then((currentToken) => {
-                if (currentToken) {
-                  console.log('current token for client: ', currentToken);
-                  saveTokenToServer(currentToken);
-                } else {
-                  console.log('No registration token available. Request permission to generate one.');
-                }
-              })
-              .catch((err) => {
-                console.log('An error occurred while retrieving token. ', err);
-              });
+          navigator.serviceWorker.register('/firebase-messaging-sw.js').then(registration => {
+            console.log('Service Worker registered:', registration);
+            navigator.serviceWorker.ready.then(readyRegistration => {
+              console.log('Service Worker is active and ready:', readyRegistration);
+              getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY, serviceWorkerRegistration: readyRegistration })
+                .then((currentToken) => {
+                  if (currentToken) {
+                    console.log('Current token for client:', currentToken);
+                    saveTokenToServer(currentToken);
+                  } else {
+                    console.log('No registration token available. Request permission to generate one.');
+                  }
+                })
+                .catch((err) => {
+                  console.error('An error occurred while retrieving token:', err);
+                });
+            }).catch(err => {
+              console.error('Service Worker ready failed:', err);
+            });
+          }).catch(err => {
+            console.error('Service Worker registration failed:', err);
           });
         }
+      }).catch(err => {
+        console.error('Notification permission request failed:', err);
       });
+    } else {
+      console.error('Service Worker not supported or Window not defined');
     }
   }, []);
 
@@ -63,7 +76,7 @@ export default function Main() {
         { withCredentials: true }
       );
       if (response.data.status === 'success') {
-        router.push('/help_req/req_waiting')
+        router.push('/help_req/req_waiting');
       } else {
         console.error('도움 요청 실패:', response.data.message);
       }
