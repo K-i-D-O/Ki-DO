@@ -14,14 +14,14 @@
 
 > ** ** : [https://ki-do.kr/](https://ki-do.kr/) <br>
 
-## 개발팀 소개
+## 개발팀 소개 🧑‍🤝‍🧑
 
 |      이정민(팀장)       |          손형민         |       김민성         |       이은서        |                                                                                                             
 | :---------------: | :---------------------: | :-----------------: | :----------------: |
 |   [@BBongDDa](https://github.com/BBongDDa)   |    [@mimimoo02](https://github.com/mimimoo02)  | [@minseong0213](https://github.com/minseong0213)  | [@BBBaekSeung](https://github.com/BBBaekSeung) |
 | 컴퓨터공학전공 3학년 | 인공지능공학전공 4학년 | 소프트웨어전공 3학년 | 컴퓨터공학전공 4학년 |
 
-## 👨‍🏫프로젝트 소개
+## 프로젝트 소개 👨‍🏫
 프로젝트 소개가 들어갑니당
 
 
