@@ -48,7 +48,7 @@
 - “내 근처 안내사 보기”에서 현재 사용자의 위치를 기반으로 반경 1km 안에 있는 디지털 안내사의 위치를 찾을 수 있습니다. 
 
 
-  ## Stacks 🐈
+## Stacks 🐈
 
 ### Environment
 ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white)
