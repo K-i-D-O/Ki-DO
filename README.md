@@ -1,5 +1,3 @@
-[캡스톤] 디지털 소외계층, 노년층들을 위한 키오스크 도우미 / 키도, 모의키오스크 + 도움요청기능 + 디지털안내사 지도
-
 # Ki-DO 키오스크 도우미
 
 <div align="center">
@@ -10,17 +8,56 @@
 </div>
 
 # Ki-DO
-> **삼육대학교 모바일 프로그래밍 캡스톤 3팀** <br/> **개발기간: 2024.04 ~ 2024.06**
+> **삼육대학교 모바일 프로그래밍(캡스톤 프로젝트) 3팀** <br/> **⏲️개발기간: 2024.04 ~ 2024.06**
 
 ## 배포 주소
 
 > ** ** : [https://ki-do.kr/](https://ki-do.kr/) <br>
 
-## 웹개발팀 소개
+## 개발팀 소개
 
-|      이정민       |          손형민         |       김민성         |       이은서        |                                                                                                             
+|      이정민(팀장)       |          손형민         |       김민성         |       이은서        |                                                                                                             
 | :---------------: | :---------------------: | :-----------------: | :----------------: |
 |   [@BBongDDa](https://github.com/BBongDDa)   |    [@mimimoo02](https://github.com/mimimoo02)  | [@minseong0213](https://github.com/minseong0213)  | [@BBBaekSeung](https://github.com/BBBaekSeung) |
 | 컴퓨터공학전공 3학년 | 인공지능공학전공 4학년 | 소프트웨어전공 3학년 | 컴퓨터공학전공 4학년 |
 
-## 프로젝트 소개
+## 👨‍🏫프로젝트 소개
+
+
+
+## 주요 기능 📦
+
+### ⭐️ 모의 키오스크
+- 
+
+### ⭐️ 도움요청기능
+- 
+
+### ⭐️ 디지털 안내사 지도
+- 
+
+  ## Stacks 🐈
+
+### Environment
+![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
+![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white)             
+
+### Config
+![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)        
+
+### Development
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=Javascript&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Strapi](https://img.shields.io/badge/Strapi-2F2E8B?style=for-the-badge&logo=Strapi&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=Next.js&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=Bootstrap&logoColor=white)
+![Material UI](https://img.shields.io/badge/Material%20UI-007FFF?style=for-the-badge&logo=MUI&logoColor=white)
+
+### Communication
+![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white)
+![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white)
+![GoogleMeet](https://img.shields.io/badge/GoogleMeet-00897B?style=for-the-badge&logo=Google%20Meet&logoColor=white)
+
+
+
