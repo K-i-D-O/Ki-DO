@@ -69,5 +69,14 @@
 ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white)
 ![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)
 
+## 클라이언트 서버 실행방법
+```bash
+npm run dev
+# or
+yarn dev
+# or
+npm dev
+```
+
 
 
