@@ -12,19 +12,25 @@ export default function Main() {
   const [isLoading, setIsLoading] = useState(true);
   const [isHelper, setIsHelper] = useState(false);
 
-  //FCM토큰 저장
+  // FCM 토큰 저장
   const saveTokenToServer = async (token) => {
     const storedUsername = localStorage.getItem("guestUsername");
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/save-token/`, { token, username: storedUsername }, { withCredentials: true });
       if (response.data.status === "success") {
         console.log("Token saved successfully");
+        localStorage.setItem("fcmToken", token); // 토큰을 로컬 스토리지에 저장
       } else {
         console.error("Failed to save token:", response.data.message);
       }
     } catch (error) {
       console.error("Error saving token:", error);
     }
+  };
+
+  // 로컬 스토리지에서 토큰 불러오기
+  const getTokenFromStorage = () => {
+    return localStorage.getItem("fcmToken");
   };
 
   // 날짜와 시간 형식 변환 함수
@@ -41,12 +47,13 @@ export default function Main() {
     return date.toLocaleString("ko-KR", options);
   };
 
-  //헬퍼 푸시알림 전체목록
+  // 헬퍼 푸시 알림 전체 목록
   useEffect(() => {
     const fetchRequests = async () => {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/requests/`);
-        setRequests(response.data.requests);
+        const sortedRequests = response.data.requests.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        setRequests(sortedRequests);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching requests:", error);
@@ -57,44 +64,55 @@ export default function Main() {
     fetchRequests();
   }, []);
 
-  //웹페이지가 닫혀있을때 푸시알림
+  // 웹페이지가 닫혀있을 때 푸시 알림
   useEffect(() => {
     if (typeof window !== "undefined" && "serviceWorker" in navigator) {
       Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
           navigator.serviceWorker.ready.then((registration) => {
-            getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY, serviceWorkerRegistration: registration })
-              .then((currentToken) => {
-                if (currentToken) {
-                  console.log("current token for client: ", currentToken);
-                  saveTokenToServer(currentToken);
-                } else {
-                  console.log("No registration token available. Request permission to generate one.");
-                }
+            let currentToken = getTokenFromStorage();
+
+            if (!currentToken) {
+              getToken(messaging, {
+                vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
+                serviceWorkerRegistration: registration
               })
-              .catch((err) => {
-                console.log("An error occurred while retrieving token. ", err);
-              });
+                .then((newToken) => {
+                  if (newToken) {
+                    console.log("New token for client: ", newToken);
+                    saveTokenToServer(newToken);
+                  } else {
+                    console.log("No registration token available. Request permission to generate one.");
+                  }
+                })
+                .catch((err) => {
+                  console.log("An error occurred while retrieving token. ", err);
+                });
+            } else {
+              console.log("Token retrieved from storage: ", currentToken);
+            }
+
+            onMessage(messaging, (payload) => {
+              console.log("Message received. ", payload);
+              if (payload.notification) {
+                const notificationTitle = payload.notification.title;
+                const notificationOptions = {
+                  body: payload.notification.body,
+                  icon: payload.notification.icon,
+                };
+
+                if (Notification.permission === "granted") {
+                  registration.showNotification(notificationTitle, notificationOptions);
+                }
+              }
+            });
           });
-        }
-      });
-
-      onMessage(messaging, (payload) => {
-        console.log("Message received. ", payload);
-        const notificationTitle = payload.notification.title;
-        const notificationOptions = {
-          body: payload.notification.body,
-          icon: payload.notification.icon,
-        };
-
-        if (Notification.permission === "granted") {
-          new Notification(notificationTitle, notificationOptions);
         }
       });
     }
   }, []);
 
-  // 본인인증 카카오로그인
+  // 본인인증 카카오 로그인
   useEffect(() => {
     const { code } = router.query;
     if (code) {
@@ -129,7 +147,7 @@ export default function Main() {
     setIsHelper(savedIsHelper);
   }, []);
 
-  //헬퍼 상태 변환
+  // 헬퍼 상태 변환
   const toggleHelperStatus = async (status) => {
     try {
       const storedUsername = localStorage.getItem("guestUsername");
@@ -170,7 +188,8 @@ export default function Main() {
   return (
     <>
       <Head>
-        <title>키도 - 키오스크 도우미</title> <link rel="icon" href="/imgs/favi-icon.png" />
+        <title>키도 - 키오스크 도우미</title> 
+        <link rel="icon" href="/imgs/favi-icon.png" />
         <link rel="shortcut icon" href="/imgs/favi-icon.png" />
         <link rel="apple-touch-icon-precomposed" href="/imgs/favi-icon.png" />
         <meta name="description" content="키도 - 키오스크 도우미" />
@@ -234,7 +253,7 @@ export default function Main() {
               ))
             ))}
         </div>
-        <Link href="#" className="flex flex-row items-center justify-between w-full py-[12px] px-[24px] bg-transparent border border-[#D9D9D9] rounded-[4px]">
+        <Link href="/help_req/settings" className="flex flex-row items-center justify-between w-full py-[12px] px-[24px] bg-transparent border border-[#D9D9D9] rounded-[4px]">
           <div className="flex flex-col gap-y-[3px] ">
             <p className="text-[#D9D9D9] text-[17px] font-[700] tracking-[-0.8px] leading-[117%]">헬퍼로 활동하기</p>
             <p className="text-[#72777A] text-[14px] font-[500] tracking-[-0.8px] leading-[117%]">도움 요청 받기</p>

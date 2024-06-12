@@ -18,11 +18,22 @@ import { messaging, getToken } from '../utils/firebase';
 
 const store = createStore();
 
+// 카카오톡 인앱 브라우저 감지 함수
+function isKakaoInAppBrowser() {
+  const ua = navigator.userAgent.toLowerCase();
+  return ua.indexOf('kakaotalk') > -1;
+}
+
 export default function App({ Component, pageProps }) {
   const router = useRouter();
-  
+
   useEffect(() => {
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator && messaging) {
+      if (isKakaoInAppBrowser()) {
+        alert("카카오톡 브라우저에서는 푸시 알림이 지원되지 않습니다. Chrome이나 Safari 브라우저에서 열어주세요.");
+        return;
+      }
+  
       Notification.requestPermission().then(permission => {
         if (permission === 'granted') {
           navigator.serviceWorker.ready.then(registration => {
