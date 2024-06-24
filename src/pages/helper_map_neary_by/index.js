@@ -113,13 +113,15 @@ export default function Main() {
 
         map.setCenter(currentLocation);
 
+        let guideFound = false;
+
         //마커 변경
         for (const marker of markers) {
           const markerPosition = marker.getPosition();
           const distance = getDistance(lat, lng, markerPosition.getLat(), markerPosition.getLng());
-          if (distance <= 1000) {
-            //원의 반경 변경할때 동일하게
+          if (distance <= 1000) { //원의 반경 변경할때 동일하게
             marker.setImage(clickedIcon);
+            guideFound = true;
 
             //경로색 변경
             for (const polyline of polylines) {
@@ -130,6 +132,10 @@ export default function Main() {
               }
             }
           }
+        }
+
+        if (!guideFound) {
+          alert("현재 근처에 안내사가 없습니다");
         }
       });
     }
