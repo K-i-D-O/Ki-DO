@@ -42,10 +42,14 @@ export default function Main() {
 
     const polylines = [];
     const markers = [];
+    const allMarkers = [];
+
+    let clickedMarker = null; // 클릭된 마커 저장
 
     //마커아이콘 설정
     const normalIcon = new window.kakao.maps.MarkerImage("/imgs/marker.png", new window.kakao.maps.Size(20, 28));
     const clickedIcon = new window.kakao.maps.MarkerImage("/imgs/eventmarker.png", new window.kakao.maps.Size(20, 28));
+
     //json 불러오기
     fetch("/address.json")
       .then((response) => {
@@ -77,14 +81,13 @@ export default function Main() {
             for (const position of regions[region][route]) {
               const markerPosition = new window.kakao.maps.LatLng(position.latitude, position.longitude);
               const marker = new window.kakao.maps.Marker({
-                map,
                 position: markerPosition,
                 title: position.content,
                 image: normalIcon,
               });
 
               routeMarkers.push(marker);
-              markers.push(marker);
+              allMarkers.push(marker);
               path.push(markerPosition);
             }
 
@@ -127,10 +130,11 @@ export default function Main() {
                     }
                     polyline.setOptions({ strokeColor: "#FF2F01" });
 
-                    for (const j of markers) {
-                      j.setImage(normalIcon);
+                    if (clickedMarker) {
+                      clickedMarker.setImage(normalIcon);
                     }
                     marker.setImage(clickedIcon);
+                    clickedMarker = marker;
                   });
                 })(marker, polyline);
               }
@@ -139,12 +143,28 @@ export default function Main() {
             polylines.push({ polyline: routePolyline, markers: routeMarkers });
           }
         }
+
+        const updateMarkers = () => {
+          const level = map.getLevel();
+          if (level >= 5) {            //줌 레벨이 5 이상일 때
+            for (const marker of allMarkers) {
+              marker.setMap(null);
+            }
+          } else {            //줌 레벨이 5 미만일 때
+            for (const marker of allMarkers) {
+              marker.setMap(map);
+            }
+          }
+        };
+
+        updateMarkers();
+
+        window.kakao.maps.event.addListener(map, "zoom_changed", updateMarkers);
       })
       .catch((error) => {
         console.error("Error fetching positions:", error);
       });
   };
-
   return (
     <>
       <Head>
