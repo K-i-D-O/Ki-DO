@@ -23,6 +23,7 @@ export default function Main() {
 
   const initMap = async () => {
     const mapContainer = document.getElementById("map");
+
     const mapOption = {
       center: new window.kakao.maps.LatLng(37.55471954890439, 126.97078636597669), //중심좌표 서울역
       level: 5,
@@ -33,10 +34,11 @@ export default function Main() {
       location.reload();
       return;
     }
+
     const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
     const polylines = [];
-    const markers = [];
+    const allMarkers = [];
 
     //마커아이콘 설정
     const normalIcon = new window.kakao.maps.MarkerImage("/imgs/marker.png", new window.kakao.maps.Size(20, 28));
@@ -68,14 +70,13 @@ export default function Main() {
         const routeMarkers = []; //마커저장
         for (const position of regions[region][route]) {
           const marker = new window.kakao.maps.Marker({
-            map: map,
             position: new window.kakao.maps.LatLng(position.latitude, position.longitude),
             title: position.content,
             image: normalIcon,
           });
 
           routeMarkers.push(marker);
-          markers.push(marker);
+          allMarkers.push(marker);
           path.push(new window.kakao.maps.LatLng(position.latitude, position.longitude));
         }
 
@@ -114,31 +115,66 @@ export default function Main() {
         map.setCenter(currentLocation);
 
         let guideFound = false;
+        let guideMarkers = [];
 
-        //마커 변경
-        for (const marker of markers) {
-          const markerPosition = marker.getPosition();
-          const distance = getDistance(lat, lng, markerPosition.getLat(), markerPosition.getLng());
-          if (distance <= 1000) { //원의 반경 변경할때 동일하게
-            marker.setImage(clickedIcon);
-            guideFound = true;
-
-            //경로색 변경
-            for (const polyline of polylines) {
-              if (polyline.markers.includes(marker)) {
-                polyline.polyline.setOptions({
-                  strokeColor: "#232323",
-                });
-              }
+        //마커 변경 및 경로 색상 변경
+        for (const polyline of polylines) {
+          let markerCountWithinRadius = 0;
+          for (const marker of polyline.markers) {
+            const markerPosition = marker.getPosition();
+            const distance = getDistance(lat, lng, markerPosition.getLat(), markerPosition.getLng());
+            if (distance <= 1000) { //원의 반경 변경할때 동일하게
+              marker.setImage(clickedIcon);
+              markerCountWithinRadius++;
+              guideMarkers.push(marker);
             }
+          }
+
+          //경로 색 변경 (두 개 이상의 마커가 반경 내에 있는 경우)
+          if (markerCountWithinRadius >= 2) {
+            polyline.polyline.setOptions({
+              strokeColor: "#FF0000"
+            });
+            guideFound = true; // 안내사가 있다고 표시
+          } else {
+            polyline.polyline.setOptions({
+              strokeColor: "#232323"
+            });
           }
         }
 
+        // 안내사가 없는 경우 메시지 표시
         if (!guideFound) {
           alert("현재 근처에 안내사가 없습니다");
         }
+
+        // 경로에 속한 마커들 중 안내사가 있는 경우에 대한 추가 로직
+        if (guideMarkers.length >= 2) {
+          // guideMarkers를 이용하여 추가적인 처리
+        }
       });
     }
+
+    const updateMarkers = () => {
+      const level = map.getLevel();
+      if (level >= 6) {
+        // 줌 레벨이 5 이상일 때
+        for (const marker of allMarkers) {
+          marker.setMap(null);
+        }
+      } else {
+        // 줌 레벨이 5 미만일 때
+        for (const marker of allMarkers) {
+          marker.setMap(map);
+        }
+      }
+    };
+
+    // 초기 마커 설정
+    updateMarkers();
+
+    // 줌 레벨 변경 이벤트 리스너 추가
+    window.kakao.maps.event.addListener(map, "zoom_changed", updateMarkers);
   };
 
   // Haversine 공식으로 두 점 사이의 거리 계산 (미터 단위)
