@@ -145,22 +145,22 @@ export default function Main() {
 
         const updateMarkers = () => {
           const level = map.getLevel();
-          if (level >= 5) { // 줌 레벨이 5 이상일 때
+          if (level >= 6) { // 줌 레벨 조절
             for (const { markers, polyline } of polylines) {
               for (const marker of markers) {
-                marker.setMap(null);
+                marker.setMap(null); // 마커표시 X
               }
-              polyline.setMap(null); // Hide polyline
+              polyline.setMap(null); // 경로표시 X
               if (markers.length > 0) {
-                markers[0].setMap(map); // 각 route의 첫 번째 마커만 표시
+                markers[0].setMap(map); 
               }
             }
-          } else { // 줌 레벨이 5 미만일 때
+          } else { 
             for (const { markers, polyline } of polylines) {
               for (const marker of markers) {
-                marker.setMap(map); // 모든 마커 표시
+                marker.setMap(map); 
               }
-              polyline.setMap(map); // Show polyline
+              polyline.setMap(map);
             }
           }
         };
