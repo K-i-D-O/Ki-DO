@@ -8,14 +8,44 @@ export default function Main() {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState(null);
 
+  // useEffect(() => {
+  //   const guestLogin = async () => {
+  //     try {
+  //       console.log("API URL:", process.env.NEXT_PUBLIC_DJANGO_API_URL);
+  //       const response = await axios.post(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/guest-login/`);
+  //       const guestUsername = response.data.username;
+  //       setUsername(guestUsername);
+  //       localStorage.setItem("guestUsername", guestUsername); // 유니크한 guestId를 로컬스토리지에 저장
+  //       console.log("Guest Username Set in Local Storage:", guestUsername);
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error("Failed to login as guest", error);
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   guestLogin();
+  // }, []);
+
+
   useEffect(() => {
     const guestLogin = async () => {
       try {
-        console.log("API URL:", process.env.NEXT_PUBLIC_DJANGO_API_URL);
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/guest-login/`);
-        setUsername(response.data.username);
-        localStorage.setItem("guestUsername", response.data.username); //guestId 로컬스토리지에 저장
-        console.log("Guest Username Set in Local Storage:", response.data.username);
+        const storedUsername = localStorage.getItem("guestUsername");
+
+        if (!storedUsername) { // guestUsername이 없을 경우에만 API 호출
+          console.log("API URL:", process.env.NEXT_PUBLIC_DJANGO_API_URL);
+          const response = await axios.post(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/guest-login/`);
+          
+          setUsername(response.data.username);
+          localStorage.setItem("guestUsername", response.data.username); // guestUsername을 로컬 스토리지에 저장
+          
+          console.log("Guest Username Set in Local Storage:", response.data.username);
+        } else {
+          setUsername(storedUsername); // 이미 존재하는 guestUsername 사용
+          console.log("Existing Guest Username Loaded from Local Storage:", storedUsername);
+        }
+
         setLoading(false);
       } catch (error) {
         console.error("Failed to login as guest", error);
@@ -26,9 +56,8 @@ export default function Main() {
     guestLogin();
   }, []);
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
+
+
   return (
     <>
       <Head>
