@@ -5,12 +5,14 @@ import NavBar from "@/components/common/Sub/navBar";
 import Link from "next/link";
 import axios from "axios";
 import { messaging, getToken } from "../../utils/firebase";
+import SendBirdCall from "sendbird-calls";
 
 const bg_img = { backgroundImage: "url('/imgs/help_req.svg')" };
 
 export default function Main() {
   const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [sendbirdUserId, setSendbirdUserId] = useState("");
 
   const saveTokenToServer = async (token) => {
     const storedUsername = localStorage.getItem("guestUsername");
@@ -26,7 +28,27 @@ export default function Main() {
     }
   };
 
+  const initializeSendbird = async (userId) => {
+    SendBirdCall.init(process.env.NEXT_PUBLIC_SENDBIRD_APP_ID);
+    try {
+      const authOption = { userId: userId, accessToken: null };
+      await SendBirdCall.authenticate(authOption);
+      await SendBirdCall.connectWebSocket();
+      console.log("SendBirdCall WebSocket connected");
+      return true;
+    } catch (error) {
+      console.error("Sendbird connection error: ", error);
+      return false;
+    }
+  };
+
   useEffect(() => {
+    const storedUsername = localStorage.getItem("guestUsername");
+    if (storedUsername) {
+      setSendbirdUserId(storedUsername);
+      initializeSendbird(storedUsername);
+    }
+
     if (typeof window !== "undefined" && "serviceWorker" in navigator) {
       Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
@@ -51,6 +73,12 @@ export default function Main() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!sendbirdUserId) {
+      console.error("Sendbird user not initialized.");
+      return;
+    }
+
     try {
       const storedUsername = localStorage.getItem("guestUsername");
       const response = await axios.post(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/request-help/`, { phone_number: phoneNumber, username: storedUsername }, { withCredentials: true });

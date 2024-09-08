@@ -107,7 +107,7 @@ export default function Main() {
           const convertResponse = await axios.post(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/kakao-helper/`, userData);
           console.log(userData);
           if (convertResponse.data.status === "success") {
-            localStorage.setItem("guestUsername", userData.id); // 업데이트된 guestUsername
+            localStorage.setItem("helperUserId", userData.id); // 업데이트된 guestUsername
             setIsHelper(true); // 헬퍼 상태로 전환
             localStorage.setItem("isHelper", true); // 헬퍼 상태를 로컬 스토리지에 저장
             router.push("/help_req/settings_helper_main");
@@ -152,7 +152,7 @@ export default function Main() {
   // 요청 수락 및 거절 처리
   const handleRequestResponse = async (requestId, response) => {
     try {
-      const storedUsername = localStorage.getItem("guestUsername");
+      const storedUsername = localStorage.getItem("helperUserId");
       const res = await axios.post(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/respond-to-request/${requestId}/${response}/`, { kakao_id: storedUsername }, { withCredentials: true });
       if (res.data.status === "success") {
         setRequests(requests.filter((request) => request.id !== requestId));

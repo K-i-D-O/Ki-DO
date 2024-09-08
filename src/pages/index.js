@@ -31,20 +31,19 @@ export default function Main() {
   useEffect(() => {
     const guestLogin = async () => {
       try {
-        const storedUsername = localStorage.getItem("guestUsername");
+        // 서버에 요청하여 새로운 guest ID를 발급받음
+        console.log("API URL:", process.env.NEXT_PUBLIC_DJANGO_API_URL);
 
-        if (!storedUsername) { // guestUsername이 없을 경우에만 API 호출
-          console.log("API URL:", process.env.NEXT_PUBLIC_DJANGO_API_URL);
-          const response = await axios.post(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/guest-login/`);
-          
-          setUsername(response.data.username);
-          localStorage.setItem("guestUsername", response.data.username); // guestUsername을 로컬 스토리지에 저장
-          
-          console.log("Guest Username Set in Local Storage:", response.data.username);
-        } else {
-          setUsername(storedUsername); // 이미 존재하는 guestUsername 사용
-          console.log("Existing Guest Username Loaded from Local Storage:", storedUsername);
-        }
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/guest-login/`,
+          {},
+          { withCredentials: true }  // 쿠키와 함께 요청을 보냄
+        );
+        
+        setUsername(response.data.username);  // 서버에서 받은 게스트 ID 사용
+        console.log("Guest Username from Server:", response.data.username);
+
+        console.log("Full response:", response.data);
 
         setLoading(false);
       } catch (error) {
@@ -53,7 +52,7 @@ export default function Main() {
       }
     };
 
-    guestLogin();
+    guestLogin();  // 페이지 로딩 시 게스트 로그인 수행
   }, []);
 
 
