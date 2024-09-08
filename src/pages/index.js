@@ -7,6 +7,7 @@ import axios from "axios";
 export default function Main() {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState(null);
+  const [isHelper, setIsHelper] = useState(false);
 
   // useEffect(() => {
   //   const guestLogin = async () => {
@@ -31,28 +32,60 @@ export default function Main() {
   useEffect(() => {
     const guestLogin = async () => {
       try {
-        // 서버에 요청하여 새로운 guest ID를 발급받음
-        console.log("API URL:", process.env.NEXT_PUBLIC_DJANGO_API_URL);
+        const storedGuestUsername = localStorage.getItem("guestUsername");
 
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/guest-login/`,
-          {},
-          { withCredentials: true }  // 쿠키와 함께 요청을 보냄
-        );
-        
-        setUsername(response.data.username);  // 서버에서 받은 게스트 ID 사용
-        console.log("Guest Username from Server:", response.data.username);
+        if (storedGuestUsername) {
+          // guestID가 이미 로컬 스토리지에 존재하면 그것을 사용
+          setUsername(storedGuestUsername);
+          console.log("Guest Username from Local Storage:", storedGuestUsername);
+          setLoading(false);
+        } else {
+          // guestID가 없으면 서버에 요청하여 새로운 guest ID 발급
+          console.log("API URL:", process.env.NEXT_PUBLIC_DJANGO_API_URL);
 
-        console.log("Full response:", response.data);
+          const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/helprq/api/guest-login/`,
+            {},
+            { withCredentials: true } // 필요시 세션 사용
+          );
 
-        setLoading(false);
+          const newGuestUsername = response.data.username;
+
+          // 로컬 스토리지에 guestID 저장
+          localStorage.setItem("guestUsername", newGuestUsername);
+          setUsername(newGuestUsername);
+          console.log("Guest Username from Server:", newGuestUsername);
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Failed to login as guest", error);
         setLoading(false);
       }
     };
 
-    guestLogin();  // 페이지 로딩 시 게스트 로그인 수행
+    const checkHelperStatus = () => {
+      const savedIsHelper = localStorage.getItem("isHelper") === "true";
+
+      if (!savedIsHelper) {
+        // 헬퍼가 아닌 경우 helperUserId를 삭제하고 게스트로 전환
+        localStorage.removeItem("helperUserId");
+        guestLogin(); // 게스트 로그인 로직 호출
+      } else {
+        setIsHelper(true); // 헬퍼 상태 유지
+        const helperUserId = localStorage.getItem("helperUserId");
+        setUsername(helperUserId); // 헬퍼 ID를 사용
+        setLoading(false);
+      }
+    };
+
+    checkHelperStatus(); // 헬퍼 상태와 게스트 상태를 확인
+
+    // 컴포넌트가 언마운트될 때 헬퍼 상태를 false로 설정
+    return () => {
+      console.log("Component is unmounting, setting helper state to false");
+      setIsHelper(false);
+      localStorage.setItem("isHelper", false);
+    };
   }, []);
 
 
