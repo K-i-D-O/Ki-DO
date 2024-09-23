@@ -23,8 +23,9 @@ export default function Main() {
 
   const initMap = async () => {
     const mapContainer = document.getElementById("map");
+
     const mapOption = {
-      center: new window.kakao.maps.LatLng(37.55471954890439, 126.97078636597669), //중심좌표 서울역
+      center: new window.kakao.maps.LatLng(37.55471954890439, 126.97078636597669), // 중심좌표 서울역
       level: 5,
     };
 
@@ -33,12 +34,15 @@ export default function Main() {
       location.reload();
       return;
     }
+
     const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
     const polylines = [];
-    const markers = [];
+    const allMarkers = [];
+    let clickedMarker = null; // 클릭된 마커 저장
+    const infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 }); // 말풍선
 
-    //마커아이콘 설정
+    // 마커 아이콘 설정
     const normalIcon = new window.kakao.maps.MarkerImage("/imgs/marker.png", new window.kakao.maps.Size(20, 28));
     const clickedIcon = new window.kakao.maps.MarkerImage("/imgs/eventmarker.png", new window.kakao.maps.Size(20, 28));
 
@@ -61,21 +65,20 @@ export default function Main() {
       regions[region][route].push(position);
     }
 
-    //마커찍기, 경로 잇기
+    // 마커 찍기, 경로 잇기
     for (const region in regions) {
       for (const route in regions[region]) {
-        const path = []; //경로저장
-        const routeMarkers = []; //마커저장
+        const path = []; // 경로 저장
+        const routeMarkers = []; // 마커 저장
         for (const position of regions[region][route]) {
           const marker = new window.kakao.maps.Marker({
-            map: map,
             position: new window.kakao.maps.LatLng(position.latitude, position.longitude),
             title: position.content,
             image: normalIcon,
           });
 
           routeMarkers.push(marker);
-          markers.push(marker);
+          allMarkers.push(marker);
           path.push(new window.kakao.maps.LatLng(position.latitude, position.longitude));
         }
 
@@ -88,11 +91,51 @@ export default function Main() {
           strokeStyle: "solid",
         });
 
+        // 경로 클릭 이벤트
+        (function (polyline, routeMarkers) {
+          window.kakao.maps.event.addListener(polyline, "click", function () {
+            for (const j of polylines) {
+              j.polyline.setOptions({ strokeColor: "#232323" });
+            }
+            polyline.setOptions({ strokeColor: "#FF2F01" });
+
+            for (const j of allMarkers) {
+              j.setImage(normalIcon);
+            }
+
+            if (routeMarkers.length > 0) {
+              map.setCenter(routeMarkers[0].getPosition());
+            }
+          });
+
+          // 마커 클릭 이벤트 추가
+          for (const marker of routeMarkers) {
+            (function (marker, polyline) {
+              window.kakao.maps.event.addListener(marker, "click", function () {
+                const content = `<div style="padding:5px; text-align:center; font-size:11px;">${marker.getTitle()}</div>`;
+                infowindow.setContent(content);
+                infowindow.open(map, marker);
+
+                for (const j of polylines) {
+                  j.polyline.setOptions({ strokeColor: "#232323" });
+                }
+                polyline.setOptions({ strokeColor: "#FF2F01" });
+
+                if (clickedMarker) {
+                  clickedMarker.setImage(normalIcon);
+                }
+                marker.setImage(clickedIcon);
+                clickedMarker = marker;
+              });
+            })(marker, polyline);
+          }
+        })(routePolyline, routeMarkers);
+
         polylines.push({ polyline: routePolyline, markers: routeMarkers });
       }
     }
 
-    //현재 위치 불러오기
+    // 현재 위치 불러오기
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
         const lat = position.coords.latitude;
@@ -100,10 +143,10 @@ export default function Main() {
 
         const currentLocation = new window.kakao.maps.LatLng(lat, lng);
 
-        //위치를 중심으로 원 그리기
+        // 위치를 중심으로 원 그리기
         const circle = new window.kakao.maps.Circle({
           center: currentLocation,
-          radius: 1000, //반경 1km
+          radius: 1000, // 반경 1km
           strokeWeight: 0,
           strokeOpacity: 0,
           fillColor: "#FF0000",
@@ -113,26 +156,87 @@ export default function Main() {
 
         map.setCenter(currentLocation);
 
-        //마커 변경
-        for (const marker of markers) {
-          const markerPosition = marker.getPosition();
-          const distance = getDistance(lat, lng, markerPosition.getLat(), markerPosition.getLng());
-          if (distance <= 1000) {
-            //원의 반경 변경할때 동일하게
-            marker.setImage(clickedIcon);
+        let guideFound = false;
+        let guideMarkers = [];
+        let nearestMarker = null;
+        let nearestDistance = Infinity;
 
-            //경로색 변경
-            for (const polyline of polylines) {
-              if (polyline.markers.includes(marker)) {
-                polyline.polyline.setOptions({
-                  strokeColor: "#232323",
-                });
-              }
+        // 마커 변경 및 경로 색상 변경
+        for (const polyline of polylines) {
+          let markerCountWithinRadius = 0;
+          for (const marker of polyline.markers) {
+            const markerPosition = marker.getPosition();
+            const distance = getDistance(lat, lng, markerPosition.getLat(), markerPosition.getLng());
+            if (distance <= 1000) { // 반경 1km
+              marker.setImage(clickedIcon);
+              markerCountWithinRadius++;
+              guideMarkers.push(marker);
+            }
+
+            // 가장 가까운 마커 찾기
+            if (distance < nearestDistance) {
+              nearestDistance = distance;
+              nearestMarker = marker;
             }
           }
+
+          // 두 개 이상의 마커가 반경 내에 있는 경우 경로 색상 변경
+          if (markerCountWithinRadius >= 2) {
+            polyline.polyline.setOptions({
+              strokeColor: "#FF0000"
+            });
+            guideFound = true; // 안내사 표시
+          } else {
+            polyline.polyline.setOptions({
+              strokeColor: "#232323"
+            });
+          }
+        }
+
+        // 근처에 안내사 없을 경우 ALERT 후 가장 가까운 안내사 위치로 이동
+        if (!guideFound && nearestMarker) {
+          alert("현재 근처에 안내사가 없습니다. 가장 가까운 안내사의 위치로 이동합니다.");
+          const markerPosition = nearestMarker.getPosition();
+          map.setCenter(markerPosition);
+          nearestMarker.setImage(clickedIcon);
+
+          const moveLatLon = new window.kakao.maps.LatLng(markerPosition.getLat(), markerPosition.getLng());
+          map.panTo(moveLatLon);
+        }
+
+        if (guideMarkers.length >= 2) {
         }
       });
     }
+
+    const updateMarkers = () => {
+      const level = map.getLevel();
+      if (level >= 6) {
+        // 줌 레벨이 6 이상일 때
+        for (const polyline of polylines) {
+          polyline.polyline.setMap(null); // 경로 숨기기
+          for (let i = 1; i < polyline.markers.length; i++) {
+            polyline.markers[i].setMap(null); // 마커 숨기기
+          }
+          if (polyline.markers.length > 0) {
+            polyline.markers[0].setMap(map); // 첫 번째 마커만 표시
+          }
+        }
+      } else {
+        for (const polyline of polylines) {
+          polyline.polyline.setMap(map); 
+          for (const marker of polyline.markers) {
+            marker.setMap(map); 
+          }
+        }
+      }
+    };
+
+    // 초기 마커 설정
+    updateMarkers();
+
+    // 줌 레벨 변경 이벤트 리스너 추가
+    window.kakao.maps.event.addListener(map, "zoom_changed", updateMarkers);
   };
 
   // Haversine 공식으로 두 점 사이의 거리 계산 (미터 단위)

@@ -41,12 +41,15 @@ export default function Main() {
     const infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 }); //말풍선
 
     const polylines = [];
-    const markers = [];
+    const allMarkers = [];
 
-    //마커아이콘 설정
+    let clickedMarker = null; // 클릭된 마커 저장
+
+    // 마커 아이콘 설정
     const normalIcon = new window.kakao.maps.MarkerImage("/imgs/marker.png", new window.kakao.maps.Size(20, 28));
     const clickedIcon = new window.kakao.maps.MarkerImage("/imgs/eventmarker.png", new window.kakao.maps.Size(20, 28));
-    //json 불러오기
+
+    // json 불러오기
     fetch("/address.json")
       .then((response) => {
         if (!response.ok) {
@@ -69,22 +72,21 @@ export default function Main() {
           regions[region][route].push(position);
         }
 
-        //마커찍기, 경로 잇기
+        // 마커 찍기, 경로 잇기
         for (const region in regions) {
           for (const route in regions[region]) {
-            const path = []; // 경로저장
-            const routeMarkers = []; //마커저장
+            const path = []; // 경로 저장
+            const routeMarkers = []; // 마커 저장
             for (const position of regions[region][route]) {
               const markerPosition = new window.kakao.maps.LatLng(position.latitude, position.longitude);
               const marker = new window.kakao.maps.Marker({
-                map,
                 position: markerPosition,
                 title: position.content,
                 image: normalIcon,
               });
 
               routeMarkers.push(marker);
-              markers.push(marker);
+              allMarkers.push(marker);
               path.push(markerPosition);
             }
 
@@ -97,7 +99,7 @@ export default function Main() {
               strokeStyle: "solid",
             });
 
-            //경로 클릭 이벤트
+            // 경로 클릭 이벤트
             (function (polyline, routeMarkers) {
               window.kakao.maps.event.addListener(polyline, "click", function () {
                 for (const j of polylines) {
@@ -105,7 +107,7 @@ export default function Main() {
                 }
                 polyline.setOptions({ strokeColor: "#FF2F01" });
 
-                for (const j of markers) {
+                for (const j of allMarkers) {
                   j.setImage(normalIcon);
                 }
 
@@ -114,7 +116,7 @@ export default function Main() {
                 }
               });
 
-              //마커 클릭 이벤트
+              // 마커 클릭 이벤트
               for (const marker of routeMarkers) {
                 (function (marker, polyline) {
                   window.kakao.maps.event.addListener(marker, "click", function () {
@@ -127,10 +129,11 @@ export default function Main() {
                     }
                     polyline.setOptions({ strokeColor: "#FF2F01" });
 
-                    for (const j of markers) {
-                      j.setImage(normalIcon);
+                    if (clickedMarker) {
+                      clickedMarker.setImage(normalIcon);
                     }
                     marker.setImage(clickedIcon);
+                    clickedMarker = marker;
                   });
                 })(marker, polyline);
               }
@@ -139,6 +142,32 @@ export default function Main() {
             polylines.push({ polyline: routePolyline, markers: routeMarkers });
           }
         }
+
+        const updateMarkers = () => {
+          const level = map.getLevel();
+          if (level >= 6) { // 줌 레벨 조절
+            for (const { markers, polyline } of polylines) {
+              for (const marker of markers) {
+                marker.setMap(null); // 마커표시 X
+              }
+              polyline.setMap(null); // 경로표시 X
+              if (markers.length > 0) {
+                markers[0].setMap(map); 
+              }
+            }
+          } else { 
+            for (const { markers, polyline } of polylines) {
+              for (const marker of markers) {
+                marker.setMap(map); 
+              }
+              polyline.setMap(map);
+            }
+          }
+        };
+
+        updateMarkers();
+
+        window.kakao.maps.event.addListener(map, "zoom_changed", updateMarkers);
       })
       .catch((error) => {
         console.error("Error fetching positions:", error);
@@ -148,7 +177,8 @@ export default function Main() {
   return (
     <>
       <Head>
-        <title>키도 - 키오스크 도우미</title> <link rel="icon" href="/imgs/favi-icon.png" />
+        <title>키도 - 키오스크 도우미</title>
+        <link rel="icon" href="/imgs/favi-icon.png" />
         <link rel="shortcut icon" href="/imgs/favi-icon.png" />
         <link rel="apple-touch-icon-precomposed" href="/imgs/favi-icon.png" />
         <meta name="description" content="키도 - 키오스크 도우미" />
