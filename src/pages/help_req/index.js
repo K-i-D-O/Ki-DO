@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import NavBar from "@/components/common/Sub/navBar";
 import Link from "next/link";
 import axios from "axios";
-import { messaging, getToken } from "../../utils/firebase";
+import { messaging, getToken, onMessage } from "../../utils/firebase";
 
 const bg_img = { backgroundImage: "url('/imgs/help_req.svg')" };
 
@@ -12,6 +12,7 @@ export default function Main() {
   const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState("");
 
+  // FCM 토큰 저장
   const saveTokenToServer = async (token) => {
     const storedUsername = localStorage.getItem("guestUsername");
     try {
@@ -26,26 +27,50 @@ export default function Main() {
     }
   };
 
+  // FCM 초기화 및 토큰 저장
   useEffect(() => {
-    if (typeof window !== "undefined" && "serviceWorker" in navigator) {
-      Notification.requestPermission().then((permission) => {
-        if (permission === "granted") {
-          navigator.serviceWorker.ready.then((registration) => {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      Notification.requestPermission().then(permission => {
+        console.log('Notification permission status:', permission);
+        if (permission === 'granted') {
+          navigator.serviceWorker.register('/firebase-messaging-sw.js').then(registration => {
+            console.log('Service Worker registered:', registration);
             getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY, serviceWorkerRegistration: registration })
               .then((currentToken) => {
                 if (currentToken) {
-                  console.log("current token for client: ", currentToken);
+                  console.log('Current token for client:', currentToken);
                   saveTokenToServer(currentToken);
                 } else {
-                  console.log("No registration token available. Request permission to generate one.");
+                  console.log('No registration token available. Request permission to generate one.');
                 }
               })
               .catch((err) => {
-                console.log("An error occurred while retrieving token. ", err);
+                console.error('An error occurred while retrieving token:', err);
               });
+
+            onMessage(messaging, (payload) => {
+              console.log("Message received. ", payload);
+              if (payload.notification) {
+                const notificationTitle = payload.notification.title;
+                const notificationOptions = {
+                  body: payload.notification.body,
+                  icon: payload.notification.icon,
+                };
+
+                if (Notification.permission === "granted") {
+                  registration.showNotification(notificationTitle, notificationOptions);
+                }
+              }
+            });
+          }).catch(err => {
+            console.error('Service Worker registration failed:', err);
           });
         }
+      }).catch(err => {
+        console.error('Notification permission request failed:', err);
       });
+    } else {
+      console.error('Service Worker not supported or Window not defined');
     }
   }, []);
 
@@ -67,7 +92,8 @@ export default function Main() {
   return (
     <>
       <Head>
-        <title>키도 - 키오스크 도우미</title> <link rel="icon" href="/imgs/favi-icon.png" />
+        <title>키도 - 키오스크 도우미</title>
+        <link rel="icon" href="/imgs/favi-icon.png" />
         <link rel="shortcut icon" href="/imgs/favi-icon.png" />
         <link rel="apple-touch-icon-precomposed" href="/imgs/favi-icon.png" />
         <meta name="description" content="키도 - 키오스크 도우미" />

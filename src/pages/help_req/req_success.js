@@ -29,8 +29,8 @@ export default function Main() {
           <Link href="/" class="bg-primary flex items-center justify-center py-[15px] px-[15px] rounded-[48px] text-[#fff] w-full text-[18px] font-[700] tracking-[-0.8px] hover:opacity-70">
             처음으로 돌아가기
           </Link>
-          <Link href="/help_req/re_req_waiting" className="text-[#232323] text-[15px] font-[700] leading-[110%] tracking-[-0.2px] hover:opacity-70">
-            재요청 하기
+          <Link href="/helper_map" className="text-[#232323] text-[15px] font-[700] leading-[110%] tracking-[-0.2px] hover:opacity-70">
+            디지털 안내사 위치보기
           </Link>
         </div>
       </div>
